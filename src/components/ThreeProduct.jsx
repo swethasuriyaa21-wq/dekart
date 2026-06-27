@@ -300,6 +300,13 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
     return new THREE.ExtrudeGeometry(s, { depth: 0.1, bevelEnabled: true, bevelSegments: 4, steps: 1, bevelSize: 0.02, bevelThickness: 0.02 });
   }, []);
 
+  const selectedShapeGeometry = useMemo(() => {
+    if (shape === 'star') return starGeometry;
+    if (shape === 'heart') return heartGeometry;
+    if (shape === 'oval') return ovalGeometry;
+    return diamondGeometry;
+  }, [shape, starGeometry, heartGeometry, ovalGeometry, diamondGeometry]);
+
   return (
     <group ref={groupRef}>
       {/* 3D Ceramic Mug */}
@@ -372,11 +379,7 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
           </mesh>
           
           {/* Extruded Pendant base */}
-          <mesh position={[0, 0, 0]} castShadow receiveShadow>
-            {shape === 'star' && starGeometry}
-            {shape === 'heart' && heartGeometry}
-            {shape === 'oval' && ovalGeometry}
-            {shape === 'diamond' && diamondGeometry}
+          <mesh geometry={selectedShapeGeometry} position={[0, 0, 0]} castShadow receiveShadow>
             <meshPhysicalMaterial 
               map={printTexture} 
               roughness={0.08} 
@@ -387,11 +390,7 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
           </mesh>
 
           {/* Lavender metallic border frame */}
-          <mesh position={[0, 0, -0.012]} scale={[1.03, 1.03, 1.0]} castShadow>
-            {shape === 'star' && starGeometry}
-            {shape === 'heart' && heartGeometry}
-            {shape === 'oval' && ovalGeometry}
-            {shape === 'diamond' && diamondGeometry}
+          <mesh geometry={selectedShapeGeometry} position={[0, 0, -0.012]} scale={[1.03, 1.03, 1.0]} castShadow>
             <meshPhysicalMaterial 
               color="#c8b6ff" // Lavender border
               metalness={0.9} 
@@ -405,8 +404,7 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
       {/* 3D T-Shirt */}
       {type === 'tshirt' && (
         <group scale={[1.05, 1.05, 1.05]} position={[0, 0.1, 0]}>
-          <mesh castShadow receiveShadow>
-            {tshirtGeometry}
+          <mesh geometry={tshirtGeometry} castShadow receiveShadow>
             <meshPhysicalMaterial 
               map={printTexture} 
               roughness={0.9} 
