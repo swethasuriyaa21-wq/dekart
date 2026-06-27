@@ -91,7 +91,38 @@ function MovingObject({ activeSection, activeProduct, designColor, designImage, 
 
   return (
     <group ref={group} dispose={null}>
-      {activeSection === 1 ? (
+      {activeSection === 0 ? (
+        // Render a magical cluster of floating gifts!
+        <group>
+          {/* Adorable Mini Mug */}
+          <Float speed={2.5} rotationIntensity={0.3} floatIntensity={0.4}>
+            <group position={[0.7, -0.55, 0]} scale={[0.8, 0.8, 0.8]}>
+              <ThreeProduct type="mug" color="#ffffff" designText="☕ COZY" />
+            </group>
+          </Float>
+
+          {/* Adorable Mini Heart Keychain */}
+          <Float speed={3.0} rotationIntensity={0.4} floatIntensity={0.5}>
+            <group position={[-0.85, -0.65, 0.1]} scale={[0.8, 0.8, 0.8]} rotation={[0, Math.PI / 4, 0]}>
+              <ThreeProduct type="keychain" color="#c8b6ff" shape="heart" designText="🔑 LOVE" />
+            </group>
+          </Float>
+
+          {/* Adorable Mini Printed T-Shirt */}
+          <Float speed={2.2} rotationIntensity={0.2} floatIntensity={0.35}>
+            <group position={[-0.1, -0.95, -0.2]} scale={[0.65, 0.65, 0.65]} rotation={[0, -Math.PI / 6, 0]}>
+              <ThreeProduct type="tshirt" color="#ffffff" designText="👕 CHILL" />
+            </group>
+          </Float>
+
+          {/* Adorable Mini Fridge Magnet */}
+          <Float speed={2.8} rotationIntensity={0.3} floatIntensity={0.45}>
+            <group position={[0.22, -0.4, 0.2]} scale={[0.65, 0.65, 0.65]} rotation={[0.1, 0.2, 0]}>
+              <ThreeProduct type="magnet" color="#4cc9f0" designText="✨ MEMORY" />
+            </group>
+          </Float>
+        </group>
+      ) : activeSection === 1 ? (
         <Center>
           <ThreeProduct
             type={activeProduct}
