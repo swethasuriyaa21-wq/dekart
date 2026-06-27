@@ -4,30 +4,40 @@
   --font-heading: 'Outfit', sans-serif;
   --font-body: 'Inter', sans-serif;
 
-  /* Playful Monochrome Palette */
+  /* Spacious Cozy Backgrounds */
   --bg-cream: #FAF9F5;
   --bg-card: #ffffff;
   --bg-input: #ffffff;
   
-  /* Bold Black Borders */
+  /* Bold Outlines (Neo-Brutalism Cozy) */
   --border-cute: #000000;
   --border-focus: #000000;
   
-  /* Monochrome Gradients & Text */
-  --grad-cream: linear-gradient(180deg, #FAF9F5 0%, #FFFFFF 100%);
-  --grad-text: linear-gradient(135deg, #000000 0%, #334155 100%);
-
-  --text-primary: #000000;
-  --text-secondary: #334155;
-  --text-muted: #64748b;
-
-  /* Solid Black Offset Shadows (Neo-Brutalism) */
-  --shadow-flat: 6px 6px 0px #000000;
-  --shadow-flat-hover: 10px 10px 0px #000000;
-  --shadow-flat-active: 2px 2px 0px #000000;
-  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+  /* Colorful Pastel Swatches */
+  --pastel-pink: #ff758f;
+  --pastel-pink-light: #ffccd5;
+  --pastel-mint: #80ed99;
+  --pastel-mint-light: #c7f9cc;
+  --pastel-lavender: #c8b6ff;
+  --pastel-peach: #ffb703;
+  --pastel-blue: #4cc9f0;
   
-  --transition-cute: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  /* Gradients */
+  --grad-cream: linear-gradient(180deg, #FAF9F5 0%, #fff0f3 100%);
+  --grad-text: linear-gradient(135deg, #000000 0%, #334155 100%);
+  --grad-cute-text: linear-gradient(135deg, #ff4d6d 0%, #7000ff 100%);
+
+  /* Typography Colors */
+  --text-primary: #000000;
+  --text-secondary: #4a5568;
+  --text-muted: #a0aec0;
+
+  /* Solid Offset Shadows (Playful Pastel Shadows) */
+  --shadow-flat: 6px 6px 0px var(--pastel-pink-light);
+  --shadow-flat-hover: 10px 10px 0px var(--pastel-pink);
+  --shadow-flat-active: 2px 2px 0px #000000;
+  
+  --transition-cute: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.25);
 }
 
 /* Base Reset */
@@ -57,7 +67,7 @@ body::-webkit-scrollbar-track {
   background: var(--bg-cream);
 }
 body::-webkit-scrollbar-thumb {
-  background: #000000;
+  background: var(--pastel-pink-light);
   border: 2px solid var(--bg-cream);
   border-radius: 5px;
 }
@@ -76,7 +86,7 @@ a {
   transition: var(--transition-cute);
 }
 
-/* Playful Neo-Brutalism Cards */
+/* Playful Neo-Brutalism Pastel Cards */
 .glass-panel {
   background: var(--bg-card);
   border: 2px solid var(--border-cute);
@@ -111,7 +121,7 @@ a {
 
 .glass-input:focus {
   border-color: var(--border-focus);
-  box-shadow: 4px 4px 0px #000000;
+  box-shadow: 4px 4px 0px var(--pastel-pink-light);
 }
 
 /* Gradient Text */
@@ -122,12 +132,12 @@ a {
 }
 
 .neon-text {
-  color: #000000;
+  color: var(--pastel-pink);
   text-decoration: underline;
   text-decoration-thickness: 3px;
 }
 
-/* Neo-Brutalism Solid Buttons */
+/* Playful Solid Buttons with Black Borders */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -147,38 +157,37 @@ a {
 }
 
 .btn-primary {
-  background: #000000;
+  background: var(--pastel-pink);
   color: #ffffff;
-  box-shadow: var(--shadow-flat);
+  box-shadow: 4px 4px 0px #000000;
 }
 
 .btn-primary:hover {
   transform: translate(-3px, -3px);
-  box-shadow: var(--shadow-flat-hover);
-  background: #111111;
-  color: #ffffff;
+  box-shadow: 7px 7px 0px #000000;
+  background: #ff4d6d;
 }
 
 .btn-primary:active {
   transform: translate(2px, 2px);
-  box-shadow: var(--shadow-flat-active);
+  box-shadow: 1px 1px 0px #000000;
 }
 
 .btn-secondary {
-  background: #ffffff;
-  color: #000000;
-  box-shadow: var(--shadow-flat);
+  background: var(--pastel-lavender);
+  color: #2e1065;
+  box-shadow: 4px 4px 0px #000000;
 }
 
 .btn-secondary:hover {
   transform: translate(-3px, -3px);
-  box-shadow: var(--shadow-flat-hover);
-  background: #faf9f6;
+  box-shadow: 7px 7px 0px #000000;
+  background: #b8a3ff;
 }
 
 .btn-secondary:active {
   transform: translate(2px, 2px);
-  box-shadow: var(--shadow-flat-active);
+  box-shadow: 1px 1px 0px #000000;
 }
 
 .btn-outline {
@@ -189,9 +198,10 @@ a {
 }
 
 .btn-outline:hover {
-  background: #fafafa;
+  background: #fff5f6;
   transform: translate(-2px, -2px);
   box-shadow: 5px 5px 0px #000000;
+  color: var(--pastel-pink);
 }
 
 .btn-outline:active {
@@ -205,7 +215,7 @@ a {
   border-radius: 8px;
 }
 
-/* Floating B&W Navbar */
+/* Floating Pill Navbar with Solid Border */
 .navbar {
   position: fixed;
   top: 20px;
@@ -220,19 +230,19 @@ a {
   background: #ffffff;
   border-radius: 16px;
   border: 2px solid #000000;
-  box-shadow: 4px 4px 0px #000000;
+  box-shadow: 5px 5px 0px var(--pastel-pink-light);
   transition: var(--transition-cute);
 }
 
 .navbar-logo {
   font-family: var(--font-heading);
   font-weight: 900;
-  font-size: 1.4rem;
+  font-size: 1.45rem;
   letter-spacing: -0.02em;
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #000000;
+  color: var(--pastel-pink);
   text-transform: uppercase;
 }
 
@@ -251,7 +261,7 @@ a {
 }
 
 .navbar-links a:hover {
-  color: #000000;
+  color: var(--pastel-pink);
   text-decoration: underline;
   text-decoration-thickness: 2px;
 }
@@ -269,7 +279,7 @@ a {
   padding: 10px;
   border-radius: 8px;
   border: 2px solid #000000;
-  color: #000000;
+  color: var(--pastel-pink);
   box-shadow: 2px 2px 0px #000000;
   transition: var(--transition-cute);
 }
@@ -277,6 +287,7 @@ a {
 .cart-icon-container:hover {
   transform: translate(-1px, -1px);
   box-shadow: 3px 3px 0px #000000;
+  background: #fff5f6;
 }
 
 .cart-icon-container:active {
@@ -288,7 +299,7 @@ a {
   position: absolute;
   top: -6px;
   right: -6px;
-  background: #000000;
+  background: #ff4d6d;
   color: #ffffff;
   font-size: 0.65rem;
   font-weight: 900;
@@ -298,10 +309,10 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #ffffff;
+  border: 1px solid #000000;
 }
 
-/* Sections & Clean Margins */
+/* Sections & Clean Spaced Margins */
 .section {
   min-height: 100vh;
   width: 100%;
@@ -326,7 +337,7 @@ a {
   gap: 8px;
   background: #ffffff;
   border: 2px solid #000000;
-  color: #000000;
+  color: var(--pastel-pink);
   padding: 8px 18px;
   border-radius: 8px;
   font-size: 0.8rem;
@@ -334,7 +345,7 @@ a {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   width: fit-content;
-  box-shadow: 3px 3px 0px #000000;
+  box-shadow: 3px 3px 0px var(--pastel-pink-light);
 }
 
 .hero-title {
@@ -377,7 +388,7 @@ a {
   overflow: hidden;
   background: #ffffff;
   border: 2px solid #000000;
-  box-shadow: 6px 6px 0px #000000;
+  box-shadow: 6px 6px 0px var(--pastel-pink-light);
 }
 
 .customizer-watermark {
@@ -387,7 +398,7 @@ a {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #000000;
+  color: var(--pastel-pink);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -452,7 +463,7 @@ a {
 .selector-btn:hover {
   transform: translate(-1px, -1px);
   box-shadow: 3px 3px 0px #000000;
-  color: #000000;
+  color: var(--pastel-pink);
 }
 
 .selector-btn.active {
@@ -467,7 +478,7 @@ a {
   height: 20px;
 }
 
-.color-picker-flex {
+.color-flex-wrapper {
   display: flex;
   gap: 14px;
 }
@@ -510,7 +521,7 @@ a {
 .shape-btn:hover {
   transform: translate(-1px, -1px);
   box-shadow: 3px 3px 0px #000000;
-  color: #000000;
+  color: var(--pastel-pink);
 }
 
 .shape-btn.active {
@@ -571,7 +582,7 @@ a {
 .preset-btn:hover {
   transform: translate(-2px, -2px);
   box-shadow: 4px 4px 0px #000000;
-  color: #000000;
+  color: var(--pastel-pink);
 }
 
 /* Product Catalog */
@@ -687,7 +698,7 @@ a {
   font-family: var(--font-heading);
   font-size: 1.35rem;
   font-weight: 900;
-  color: #000000;
+  color: var(--pastel-pink);
 }
 
 /* Instagram Reels */

@@ -21,71 +21,70 @@ function MovingObject({ activeSection, activeProduct, designColor, designImage, 
     const isMobile = window.innerWidth <= 768;
 
     if (activeSection === 0) {
-      // Hero: float right side, friendly tilt
+      // Hero: float right side, small and cute
       targetX = isMobile ? 0 : 1.35;
       targetY = isMobile ? -0.45 : 0.05;
       targetZ = 0;
       targetRotX = 0.2;
       targetRotY = -0.45;
       targetRotZ = -0.05;
-      targetScale = isMobile ? 1.0 : 1.35;
+      targetScale = isMobile ? 0.75 : 1.05;
     } else if (activeSection === 1) {
-      // Customizer: snaps into left side frame
+      // Customizer: snaps into left side frame, slightly larger but still cute
       targetX = isMobile ? 0 : -1.15;
       targetY = isMobile ? 0.65 : -0.05;
       targetZ = 0;
       targetRotX = 0.05;
       targetRotY = state.clock.getElapsedTime() * 0.12;
       targetRotZ = 0;
-      targetScale = isMobile ? 1.15 : 1.45;
+      targetScale = isMobile ? 0.85 : 1.15;
     } else if (activeSection === 2) {
-      // Catalog: float at the top-right margin, completely clear of the cards grid
+      // Catalog: float at the top-right margin, small background ornament
       targetX = isMobile ? 1.8 : 2.3;
       targetY = isMobile ? -0.8 : 0.8;
       targetZ = -0.8;
       targetRotX = 0.3;
       targetRotY = state.clock.getElapsedTime() * 0.18;
       targetRotZ = -0.1;
-      targetScale = 0.7;
+      targetScale = 0.55;
     } else if (activeSection === 3) {
-      // Instagram: float at the top-left margin, clear of reels
+      // Instagram: float at the top-left margin
       targetX = isMobile ? -1.8 : -2.3;
       targetY = isMobile ? -0.6 : 0.8;
       targetZ = -0.8;
       targetRotX = 0.15;
       targetRotY = state.clock.getElapsedTime() * 0.22;
       targetRotZ = 0.1;
-      targetScale = 0.7;
+      targetScale = 0.55;
     } else {
-      // Customer Feedback (Fixing screenshot overlap):
-      // Float at the far top-right margin, scaled down, completely out of text bounds
+      // Customer Feedback: float at the far top-right margin, very small and cute
       targetX = isMobile ? 1.6 : 2.3;
       targetY = isMobile ? -0.9 : 1.0;
       targetZ = -1.2;
       targetRotX = 0.2;
       targetRotY = state.clock.getElapsedTime() * 0.1;
       targetRotZ = 0.05;
-      targetScale = 0.6;
+      targetScale = 0.45;
     }
 
-    // Gentle mouse parallax (disabled only in customizer drag mode)
+    // Dynamic, flexible cursor parallax (wider float range)
     if (activeSection !== 1) {
-      targetX += state.pointer.x * 0.3;
-      targetY += state.pointer.y * 0.3;
+      targetX += state.pointer.x * 0.75;
+      targetY += state.pointer.y * 0.75;
     }
 
-    // Smooth linear interpolation (LERP)
-    group.current.position.x = THREE.MathUtils.lerp(group.current.position.x, targetX, 0.065);
-    group.current.position.y = THREE.MathUtils.lerp(group.current.position.y, targetY, 0.065);
-    group.current.position.z = THREE.MathUtils.lerp(group.current.position.z, targetZ, 0.065);
+    // Smooth LERP (slightly faster for snappy responsive feel)
+    group.current.position.x = THREE.MathUtils.lerp(group.current.position.x, targetX, 0.075);
+    group.current.position.y = THREE.MathUtils.lerp(group.current.position.y, targetY, 0.075);
+    group.current.position.z = THREE.MathUtils.lerp(group.current.position.z, targetZ, 0.075);
 
-    const nextScale = THREE.MathUtils.lerp(group.current.scale.x, targetScale, 0.065);
+    const nextScale = THREE.MathUtils.lerp(group.current.scale.x, targetScale, 0.075);
     group.current.scale.set(nextScale, nextScale, nextScale);
 
     if (activeSection !== 1) {
-      group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, targetRotX, 0.065);
-      group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, targetRotY, 0.065);
-      group.current.rotation.z = THREE.MathUtils.lerp(group.current.rotation.z, targetRotZ, 0.065);
+      group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, targetRotX, 0.075);
+      group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, targetRotY, 0.075);
+      group.current.rotation.z = THREE.MathUtils.lerp(group.current.rotation.z, targetRotZ, 0.075);
     }
   });
 
@@ -102,7 +101,7 @@ function MovingObject({ activeSection, activeProduct, designColor, designImage, 
           />
         </Center>
       ) : (
-        <Float speed={2.5} rotationIntensity={0.15} floatIntensity={0.35}>
+        <Float speed={3.0} rotationIntensity={0.2} floatIntensity={0.45}>
           <Center>
             <ThreeProduct
               type={activeProduct}
@@ -136,7 +135,7 @@ export default function ThreeCanvas({
         {/* Soft, warm ambient light */}
         <ambientLight intensity={1.9} color="#fffcf9" />
         
-        {/* Soft overhead warm light */}
+        {/* Overhead soft warm light */}
         <directionalLight
           position={[0, 8, 0]}
           intensity={1.2}

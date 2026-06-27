@@ -90,9 +90,9 @@ function SteamParticles({ count = 12 }) {
   return (
     <instancedMesh ref={meshRef} args={[heartShapeGeometry, null, count]}>
       <meshBasicMaterial
-        color="#ffffff" // Frosted white steam hearts (monochrome theme)
+        color="#ff8fa3" // Cute strawberry pink steam hearts
         transparent
-        opacity={0.3}
+        opacity={0.35}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />
@@ -122,11 +122,11 @@ function useDesignTexture(color, designImage, designText, type) {
     if (!ctx) return;
 
     // Fill background color
-    ctx.fillStyle = color === '#ffffff' ? '#FCFAF7' : color;
+    ctx.fillStyle = color === '#ffffff' ? '#FFFDF9' : color;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Subtle guidelines (monochrome styling)
-    ctx.strokeStyle = color === '#ffffff' ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.03)';
+    // Cute background grid patterns for branding
+    ctx.strokeStyle = 'rgba(255,117,143,0.03)'; 
     ctx.lineWidth = 2;
     for (let i = 0; i < canvas.width; i += 64) {
       ctx.beginPath();
@@ -153,30 +153,30 @@ function useDesignTexture(color, designImage, designText, type) {
 
           ctx.save();
           ctx.beginPath();
-          ctx.roundRect(x, y, drawWidth, drawHeight, 16);
+          ctx.roundRect(x, y, drawWidth, drawHeight, 20); 
           ctx.clip();
           ctx.drawImage(img, x, y, drawWidth, drawHeight);
           ctx.restore();
 
           // Border outline
-          ctx.strokeStyle = color === '#ffffff' ? '#000000' : '#ffffff';
+          ctx.strokeStyle = 'rgba(255,117,143,0.2)';
           ctx.lineWidth = 4;
           ctx.beginPath();
-          ctx.roundRect(x, y, drawWidth, drawHeight, 16);
+          ctx.roundRect(x, y, drawWidth, drawHeight, 20);
           ctx.stroke();
 
           drawText(x + drawWidth / 2, y + drawHeight + 40);
           texture.needsUpdate = true;
         };
       } else {
-        // High-Contrast Typographic Default Template
-        ctx.fillStyle = color === '#ffffff' ? '#000000' : '#ffffff';
+        // Cute Typographic Default Template
+        ctx.fillStyle = '#ff758f'; 
         ctx.font = '900 48px Outfit, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('✨ dobject studio ✨', canvas.width / 2, canvas.height / 2 - 25);
         
         ctx.font = '500 24px Inter, sans-serif';
-        ctx.fillStyle = color === '#ffffff' ? '#4a5568' : '#e2e8f0';
+        ctx.fillStyle = '#475569';
         ctx.fillText('Crafting Cute Personalized Gifts', canvas.width / 2, canvas.height / 2 + 15);
         
         drawText(canvas.width / 2, canvas.height / 2 + 75);
@@ -186,7 +186,7 @@ function useDesignTexture(color, designImage, designText, type) {
 
     const drawText = (centerX, yPos) => {
       if (designText) {
-        ctx.fillStyle = color === '#ffffff' ? '#000000' : '#ffffff';
+        ctx.fillStyle = '#ff4d6d'; 
         ctx.font = '900 40px Outfit, sans-serif';
         ctx.textAlign = 'center';
         
@@ -305,7 +305,7 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
       {/* 3D Ceramic Mug */}
       {type === 'mug' && (
         <group position={[0, -0.35, 0]}>
-          {/* Ceramic Cup Cylinder Body */}
+          {/* Ceramic Cup Body */}
           <mesh castShadow receiveShadow>
             <cylinderGeometry args={[0.82, 0.82, 1.9, 48]} />
             <meshPhysicalMaterial 
@@ -322,7 +322,7 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
           <mesh position={[-0.8, 0.1, 0]} rotation={[0, 0, Math.PI / 2.3]} castShadow>
             <torusGeometry args={[0.42, 0.11, 16, 32, Math.PI * 1.15]} />
             <meshPhysicalMaterial 
-              color={color === '#ffffff' ? '#FCFAF7' : color} 
+              color={color === '#ffffff' ? '#FFFDF9' : color} 
               roughness={0.05} 
               metalness={0.0} 
               clearcoat={1.0}
@@ -334,14 +334,14 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
           <mesh position={[0, 0.72, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
             <circleGeometry args={[0.78, 32]} />
             <meshPhysicalMaterial 
-              color="#2d1b10" 
+              color="#3d2314" 
               roughness={0.05} 
               metalness={0.0} 
               clearcoat={0.9}
             />
           </mesh>
 
-          {/* Rising white hearts steam particles */}
+          {/* Adorable rising hearts steam particles */}
           <SteamParticles count={10} />
         </group>
       )}
@@ -349,11 +349,11 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
       {/* 3D Keychain */}
       {type === 'keychain' && (
         <group position={[0, 0.25, 0]}>
-          {/* Polished Silver Ring */}
+          {/* Polished Gold Ring */}
           <mesh position={[0, 0.85, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow>
             <torusGeometry args={[0.2, 0.028, 12, 32]} />
             <meshPhysicalMaterial 
-              color="#e2e8f0" 
+              color="#d4af37" // Gold ring
               metalness={0.95} 
               roughness={0.1} 
               clearcoat={1.0}
@@ -364,7 +364,7 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
           <mesh position={[0, 0.68, 0]} rotation={[0, Math.PI / 2, 0]} castShadow>
             <torusGeometry args={[0.07, 0.018, 8, 16]} />
             <meshPhysicalMaterial 
-              color="#e2e8f0" 
+              color="#d4af37" 
               metalness={0.95} 
               roughness={0.1} 
               clearcoat={1.0}
@@ -386,14 +386,14 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
             />
           </mesh>
 
-          {/* Silver metallic border frame */}
+          {/* Golden metallic border frame */}
           <mesh position={[0, 0, -0.012]} scale={[1.03, 1.03, 1.0]} castShadow>
             {shape === 'star' && starGeometry}
             {shape === 'heart' && heartGeometry}
             {shape === 'oval' && ovalGeometry}
             {shape === 'diamond' && diamondGeometry}
             <meshPhysicalMaterial 
-              color="#e2e8f0" 
+              color="#d4af37" // Golden border
               metalness={0.95} 
               roughness={0.1} 
               clearcoat={1.0}
