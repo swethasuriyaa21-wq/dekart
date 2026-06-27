@@ -2,21 +2,43 @@ import React, { useMemo, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 
-// Real-time Hot Steam Particles Emitter
-function SteamParticles({ count = 15 }) {
-  const pointsRef = useRef();
+// Cute 3D Heart-Shaped Steam Particles Emitter
+function SteamParticles({ count = 12 }) {
+  const meshRef = useRef();
 
-  // Create individual particle data: position, speed, phase, scale
+  // Tiny heart shape path
+  const heartShapeGeometry = useMemo(() => {
+    const s = new THREE.Shape();
+    s.moveTo(0, 0.06);
+    s.bezierCurveTo(0.02, 0.11, 0.1, 0.11, 0.1, 0.05);
+    s.bezierCurveTo(0.1, -0.01, 0.03, -0.06, 0, -0.11);
+    s.bezierCurveTo(-0.03, -0.06, -0.1, -0.01, -0.1, 0.05);
+    s.bezierCurveTo(-0.1, 0.11, -0.02, 0.11, 0, 0.06);
+    
+    return new THREE.ExtrudeGeometry(s, {
+      depth: 0.015,
+      bevelEnabled: true,
+      bevelSegments: 2,
+      steps: 1,
+      bevelSize: 0.005,
+      bevelThickness: 0.005
+    });
+  }, []);
+
+  // Set up particle metadata
   const particles = useMemo(() => {
     const data = [];
     for (let i = 0; i < count; i++) {
       data.push({
-        y: 0.7 + Math.random() * 1.5, // staggered start heights
-        xOffset: (Math.random() - 0.5) * 0.25,
-        zOffset: (Math.random() - 0.5) * 0.25,
-        speed: 0.25 + Math.random() * 0.25,
+        y: 0.72 + Math.random() * 1.5, // staggered start heights
+        xOffset: (Math.random() - 0.5) * 0.2,
+        zOffset: (Math.random() - 0.5) * 0.2,
+        speed: 0.2 + Math.random() * 0.2,
         phase: Math.random() * Math.PI * 2,
-        scale: 0.2 + Math.random() * 0.5,
+        scale: 0.4 + Math.random() * 0.5,
+        spinSpeedX: (Math.random() - 0.5) * 1.5,
+        spinSpeedY: 1.0 + Math.random() * 2.0,
+        spinSpeedZ: (Math.random() - 0.5) * 1.5
       });
     }
     return data;
@@ -25,54 +47,60 @@ function SteamParticles({ count = 15 }) {
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
   useFrame((state) => {
-    if (!pointsRef.current) return;
+    if (!meshRef.current) return;
     const time = state.clock.getElapsedTime();
 
     particles.forEach((p, idx) => {
       // Rise up
-      p.y += p.speed * 0.015;
+      p.y += p.speed * 0.012;
 
-      // Reset when reaching top
-      if (p.y > 2.2) {
+      // Reset when reaching top limit
+      if (p.y > 2.0) {
         p.y = 0.72;
-        p.xOffset = (Math.random() - 0.5) * 0.25;
-        p.zOffset = (Math.random() - 0.5) * 0.25;
-        p.speed = 0.25 + Math.random() * 0.25;
+        p.xOffset = (Math.random() - 0.5) * 0.2;
+        p.zOffset = (Math.random() - 0.5) * 0.2;
+        p.speed = 0.2 + Math.random() * 0.2;
       }
 
-      // Wavy drift using sine waves
-      const driftX = p.xOffset + Math.sin(time * 2 + p.phase) * 0.08;
-      const driftZ = p.zOffset + Math.cos(time * 2 + p.phase) * 0.08;
+      // Wavy thermal drift
+      const driftX = p.xOffset + Math.sin(time * 1.8 + p.phase) * 0.06;
+      const driftZ = p.zOffset + Math.cos(time * 1.8 + p.phase) * 0.06;
 
       dummy.position.set(driftX, p.y, driftZ);
 
-      // Fade out and expand slightly as steam rises
-      const lifeRatio = (p.y - 0.7) / 1.5; // 0 to 1
-      const size = p.scale * (1.0 + lifeRatio * 1.5);
+      // Tumble / spin in 3D
+      dummy.rotation.set(
+        time * p.spinSpeedX,
+        time * p.spinSpeedY,
+        time * p.spinSpeedZ
+      );
+
+      // Scale (expanding slightly then shrinking as it disappears)
+      const lifeRatio = (p.y - 0.72) / 1.28; // 0 to 1
+      const size = p.scale * (0.8 + Math.sin(lifeRatio * Math.PI) * 0.5) * Math.max(0, 1 - lifeRatio);
       dummy.scale.set(size, size, size);
 
       dummy.updateMatrix();
-      pointsRef.current.setMatrixAt(idx, dummy.matrix);
+      meshRef.current.setMatrixAt(idx, dummy.matrix);
     });
 
-    pointsRef.current.instanceMatrix.needsUpdate = true;
+    meshRef.current.instanceMatrix.needsUpdate = true;
   });
 
   return (
-    <instancedMesh ref={pointsRef} args={[null, null, count]} castShadow={false}>
-      <sphereGeometry args={[0.04, 8, 8]} />
+    <instancedMesh ref={meshRef} args={[heartShapeGeometry, null, count]}>
       <meshBasicMaterial
-        color="#e5e7eb"
+        color="#ff8fa3" // Cute strawberry pink steam hearts
         transparent
-        opacity={0.12}
-        blending={THREE.AdditiveBlending}
+        opacity={0.35}
         depthWrite={false}
+        blending={THREE.AdditiveBlending}
       />
     </instancedMesh>
   );
 }
 
-// Helper to draw the custom upload/text design on a dynamic canvas texture
+// Helper to draw the custom design on the dynamic canvas texture
 function useDesignTexture(color, designImage, designText, type) {
   const canvasRef = useRef(document.createElement('canvas'));
 
@@ -93,13 +121,13 @@ function useDesignTexture(color, designImage, designText, type) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Fill background color
-    ctx.fillStyle = color;
+    // Fill background color (use soft cream if white is selected for a warmer look)
+    ctx.fillStyle = color === '#ffffff' ? '#FFFDF9' : color;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Subtle guidelines
-    ctx.strokeStyle = color === '#ffffff' ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.02)';
-    ctx.lineWidth = 1;
+    // Cute background grid patterns for branding
+    ctx.strokeStyle = 'rgba(255,117,143,0.03)'; // subtle pink lines
+    ctx.lineWidth = 2;
     for (let i = 0; i < canvas.width; i += 64) {
       ctx.beginPath();
       ctx.moveTo(i, 0);
@@ -108,7 +136,6 @@ function useDesignTexture(color, designImage, designText, type) {
     }
 
     const drawContent = () => {
-      // Draw uploaded image
       if (designImage) {
         const img = new Image();
         img.src = designImage;
@@ -126,24 +153,31 @@ function useDesignTexture(color, designImage, designText, type) {
 
           ctx.save();
           ctx.beginPath();
-          ctx.roundRect(x, y, drawWidth, drawHeight, 16);
+          ctx.roundRect(x, y, drawWidth, drawHeight, 20); // soft rounded image corners
           ctx.clip();
           ctx.drawImage(img, x, y, drawWidth, drawHeight);
           ctx.restore();
 
-          drawText(x + drawWidth / 2, y + drawHeight + 35);
+          // Border outline for the image card
+          ctx.strokeStyle = 'rgba(255,117,143,0.2)';
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.roundRect(x, y, drawWidth, drawHeight, 20);
+          ctx.stroke();
+
+          drawText(x + drawWidth / 2, y + drawHeight + 40);
           texture.needsUpdate = true;
         };
       } else {
-        // Draw elegant default typographic mockup
-        ctx.fillStyle = color === '#ffffff' ? '#111111' : '#ffffff';
-        ctx.font = 'bold 36px Outfit, sans-serif';
+        // Cute Typographic Default Template
+        ctx.fillStyle = '#ff758f'; // Strawberry pink logo text
+        ctx.font = '900 48px Outfit, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('DOBJECT STUDIO', canvas.width / 2, canvas.height / 2 - 25);
+        ctx.fillText('✨ dobject studio ✨', canvas.width / 2, canvas.height / 2 - 25);
         
-        ctx.font = '22px Inter, sans-serif';
-        ctx.fillStyle = color === '#ffffff' ? '#666666' : '#aaaaaa';
-        ctx.fillText('Your Print Design Simulator', canvas.width / 2, canvas.height / 2 + 15);
+        ctx.font = '500 24px Inter, sans-serif';
+        ctx.fillStyle = '#475569';
+        ctx.fillText('Crafting Cute Personalized Gifts', canvas.width / 2, canvas.height / 2 + 15);
         
         drawText(canvas.width / 2, canvas.height / 2 + 75);
         texture.needsUpdate = true;
@@ -152,13 +186,13 @@ function useDesignTexture(color, designImage, designText, type) {
 
     const drawText = (centerX, yPos) => {
       if (designText) {
-        ctx.fillStyle = color === '#ffffff' ? '#00f2fe' : '#ffffff';
-        ctx.font = 'bold 36px Outfit, sans-serif';
+        ctx.fillStyle = '#ff4d6d'; // Bright pink font for custom texts
+        ctx.font = '900 40px Outfit, sans-serif';
         ctx.textAlign = 'center';
         
         const words = designText.split(' ');
         let line = '';
-        let currentY = designImage ? yPos : canvas.height / 2 + 65;
+        let currentY = designImage ? yPos : canvas.height / 2 + 70;
         
         for (let n = 0; n < words.length; n++) {
           let testLine = line + words[n] + ' ';
@@ -167,7 +201,7 @@ function useDesignTexture(color, designImage, designText, type) {
           if (testWidth > 450 && n > 0) {
             ctx.fillText(line, designImage ? centerX : canvas.width / 2, currentY);
             line = words[n] + ' ';
-            currentY += 40;
+            currentY += 44;
           } else {
             line = testLine;
           }
@@ -195,7 +229,7 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
 
   const printTexture = useDesignTexture(color, designImage, designText, type);
 
-  // Keychain Extrusions
+  // Keychain geometries
   const heartGeometry = useMemo(() => {
     const s = new THREE.Shape();
     s.moveTo(0, 0.4);
@@ -248,7 +282,6 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
     return new THREE.ExtrudeGeometry(s, { depth: 0.08, bevelEnabled: true, bevelSegments: 4, steps: 1, bevelSize: 0.03, bevelThickness: 0.03 });
   }, []);
 
-  // T-Shirt Extrusion
   const tshirtGeometry = useMemo(() => {
     const s = new THREE.Shape();
     s.moveTo(-0.2, 0.85);
@@ -271,16 +304,16 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
     <group ref={groupRef}>
       {/* 3D Ceramic Mug */}
       {type === 'mug' && (
-        <group position={[0, -0.3, 0]}>
+        <group position={[0, -0.35, 0]}>
           {/* Ceramic Cup Glazed Cylinder Body */}
           <mesh castShadow receiveShadow>
             <cylinderGeometry args={[0.82, 0.82, 1.9, 48]} />
             <meshPhysicalMaterial 
               map={printTexture} 
-              roughness={0.06} 
-              metalness={0.02} 
+              roughness={0.05} 
+              metalness={0.0} 
               clearcoat={1.0}
-              clearcoatRoughness={0.05}
+              clearcoatRoughness={0.04}
               side={THREE.DoubleSide} 
             />
           </mesh>
@@ -289,40 +322,40 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
           <mesh position={[-0.8, 0.1, 0]} rotation={[0, 0, Math.PI / 2.3]} castShadow>
             <torusGeometry args={[0.42, 0.11, 16, 32, Math.PI * 1.15]} />
             <meshPhysicalMaterial 
-              color={color} 
-              roughness={0.06} 
-              metalness={0.02} 
+              color={color === '#ffffff' ? '#FFFDF9' : color} 
+              roughness={0.05} 
+              metalness={0.0} 
               clearcoat={1.0}
-              clearcoatRoughness={0.05}
+              clearcoatRoughness={0.04}
             />
           </mesh>
 
-          {/* Hot Coffee Liquid filling the mug */}
+          {/* Hot Coffee Liquid inside the mug */}
           <mesh position={[0, 0.72, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
             <circleGeometry args={[0.78, 32]} />
             <meshPhysicalMaterial 
-              color="#2d1b10" 
+              color="#3d2314" // Rich coffee color
               roughness={0.05} 
-              metalness={0.1} 
-              clearcoat={0.8}
+              metalness={0.0} 
+              clearcoat={0.9}
             />
           </mesh>
 
-          {/* Rising Steam Particles */}
-          <SteamParticles count={18} />
+          {/* Adorable rising hearts steam particles */}
+          <SteamParticles count={10} />
         </group>
       )}
 
       {/* 3D Keychain */}
       {type === 'keychain' && (
         <group position={[0, 0.25, 0]}>
-          {/* Polished Gold Ring */}
+          {/* Polished Rose Gold Ring */}
           <mesh position={[0, 0.85, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow>
             <torusGeometry args={[0.2, 0.028, 12, 32]} />
             <meshPhysicalMaterial 
-              color="#d4af37" 
-              metalness={0.95} 
-              roughness={0.1} 
+              color="#e0aaff" // Cute soft violet ring
+              metalness={0.9} 
+              roughness={0.15} 
               clearcoat={1.0}
             />
           </mesh>
@@ -331,9 +364,9 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
           <mesh position={[0, 0.68, 0]} rotation={[0, Math.PI / 2, 0]} castShadow>
             <torusGeometry args={[0.07, 0.018, 8, 16]} />
             <meshPhysicalMaterial 
-              color="#d4af37" 
-              metalness={0.95} 
-              roughness={0.1} 
+              color="#e0aaff" 
+              metalness={0.9} 
+              roughness={0.15} 
               clearcoat={1.0}
             />
           </mesh>
@@ -346,23 +379,24 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
             {shape === 'diamond' && diamondGeometry}
             <meshPhysicalMaterial 
               map={printTexture} 
-              roughness={0.1} 
-              metalness={0.15} 
+              roughness={0.08} 
+              metalness={0.0} 
               clearcoat={1.0}
+              clearcoatRoughness={0.05}
             />
           </mesh>
 
-          {/* Golden metallic border frame */}
+          {/* Cute pink metal frame border */}
           <mesh position={[0, 0, -0.012]} scale={[1.03, 1.03, 1.0]} castShadow>
             {shape === 'star' && starGeometry}
             {shape === 'heart' && heartGeometry}
             {shape === 'oval' && ovalGeometry}
             {shape === 'diamond' && diamondGeometry}
             <meshPhysicalMaterial 
-              color="#d4af37" 
-              metalness={0.95} 
-              roughness={0.1} 
-              clearcoat={1.0}
+              color="#ff758f" // Strawberry pink border
+              metalness={0.5} 
+              roughness={0.2} 
+              clearcoat={0.8}
             />
           </mesh>
         </group>
@@ -375,9 +409,8 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
             {tshirtGeometry}
             <meshPhysicalMaterial 
               map={printTexture} 
-              roughness={0.85} 
+              roughness={0.9} 
               metalness={0.0} 
-              bumpScale={0.01}
             />
           </mesh>
         </group>
@@ -391,15 +424,15 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
             <boxGeometry args={[1.35, 1.75, 0.08]} />
             <meshPhysicalMaterial 
               map={printTexture} 
-              roughness={0.1} 
-              metalness={0.05} 
-              clearcoat={0.9}
+              roughness={0.08} 
+              metalness={0.0} 
+              clearcoat={1.0}
             />
           </mesh>
           {/* Matte rubber backing */}
           <mesh position={[0, 0, -0.05]} castShadow>
             <boxGeometry args={[1.3, 1.7, 0.02]} />
-            <meshStandardMaterial color="#1a1a1a" roughness={0.9} />
+            <meshStandardMaterial color="#2d2d2d" roughness={0.95} />
           </mesh>
         </group>
       )}

@@ -1,21 +1,21 @@
 import React from 'react';
-import { ArrowRight, Sparkles, Zap, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Sparkles, Heart, Gift, Smile } from 'lucide-react';
 
 export default function Hero({ onNavigate }) {
   return (
     <section className="section hero-section" id="home">
       <div className="hero-content">
         <div className="hero-badge floating-element">
-          <Sparkles size={16} />
-          <span>Next-Gen 3D Custom Printing Studio</span>
+          <Sparkles size={14} />
+          <span>✨ Cozy 3D Custom Gift Studio ✨</span>
         </div>
         
         <h1 className="hero-title">
-          Print Your <span className="gradient-text">Imagination</span> in <span className="neon-text">3D Real-Time</span>
+          Bring Your <span className="neon-text">Imagination</span> to Life in <span className="gradient-text">3D Preview!</span>
         </h1>
         
         <p className="hero-description">
-          Create and preview your personalized mugs, metal keychains, and apparel inside our interactive 3D studio. Express your style and order directly to your door via WhatsApp.
+          Design adorable personalized ceramic mugs, custom metal keychains, and screen-printed cotton tees right here in our interactive 3D studio. Preview instantly and order via WhatsApp! 🌸
         </p>
         
         <div className="hero-actions">
@@ -23,24 +23,24 @@ export default function Hero({ onNavigate }) {
             className="btn btn-primary"
             onClick={() => onNavigate('customizer')}
           >
-            Start Customizing <ArrowRight size={18} />
+            Start Designing <ArrowRight size={18} />
           </button>
           <button 
             className="btn btn-outline"
             onClick={() => onNavigate('catalog')}
           >
-            Explore Catalog
+            Explore Catalog 🎁
           </button>
         </div>
 
-        <div style={{ display: 'flex', gap: '20px', marginTop: '30px', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.875rem', color: '#9ca3af' }}>
-            <Zap size={16} className="neon-text" style={{ color: '#00f2fe' }} />
-            <span>24h Print & Dispatch</span>
+        <div style={{ display: 'flex', gap: '24px', marginTop: '20px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', color: '#4a5568', fontWeight: 600 }}>
+            <Gift size={16} style={{ color: '#ff758f' }} />
+            <span>Cozy Personalized Packaging</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.875rem', color: '#9ca3af' }}>
-            <ShieldCheck size={16} className="neon-text" style={{ color: '#7000ff' }} />
-            <span>Premium Glossy Finish</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', color: '#4a5568', fontWeight: 600 }}>
+            <Smile size={16} style={{ color: '#80ed99' }} />
+            <span>Happy Customer Support</span>
           </div>
         </div>
       </div>

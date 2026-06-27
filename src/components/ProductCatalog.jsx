@@ -17,7 +17,7 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
       title: 'White ceramic mug - 150ml',
       category: 'mugs',
       price: 229,
-      desc: 'Perfect small glossy white mug. Share your images/text to print.',
+      desc: 'Adorable mini glossy white mug. Send us your images/text to print!',
       image: whiteMugImg,
       type: 'mug',
       color: '#ffffff',
@@ -28,7 +28,7 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
       title: 'White ceramic mug - 330ml',
       category: 'mugs',
       price: 269,
-      desc: 'Standard daily coffee mug. Share your images/text to print.',
+      desc: 'Standard daily glossy white mug. Send us your images/text to print!',
       image: whiteMugImg,
       type: 'mug',
       color: '#ffffff',
@@ -39,7 +39,7 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
       title: 'Black ceramic mug - 330ml',
       category: 'mugs',
       price: 269,
-      desc: 'Sleek black glossy ceramic mug. Share your images/text to print.',
+      desc: 'Sleek glossy black ceramic mug. Send us your images/text to print!',
       image: blackMugImg,
       type: 'mug',
       color: '#111111',
@@ -50,7 +50,7 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
       title: 'Metal plated keychain - Star',
       category: 'keychains',
       price: 200,
-      desc: 'Single side high gloss photo printing. Star shape.',
+      desc: 'Star-shaped metal keychain. Single side high-gloss photo printing.',
       image: keychainImg,
       type: 'keychain',
       shape: 'star',
@@ -61,7 +61,7 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
       title: 'Metal Keychain - Heart',
       category: 'keychains',
       price: 200,
-      desc: 'Double side high gloss photo printing. Heart shape.',
+      desc: 'Heart-shaped metal keychain. Double side high-gloss photo printing.',
       image: keychainImg,
       type: 'keychain',
       shape: 'heart',
@@ -72,7 +72,7 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
       title: 'Metal plated keychain - Oval',
       category: 'keychains',
       price: 200,
-      desc: 'Single side high gloss photo printing. Oval shape.',
+      desc: 'Oval-shaped metal keychain. Single side high-gloss photo printing.',
       image: keychainImg,
       type: 'keychain',
       shape: 'oval',
@@ -83,7 +83,7 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
       title: 'Metal plated keychain - Diamond',
       category: 'keychains',
       price: 200,
-      desc: 'Single side high gloss photo printing. Diamond shape.',
+      desc: 'Diamond-shaped metal keychain. Single side photo printing.',
       image: keychainImg,
       type: 'keychain',
       shape: 'diamond',
@@ -94,7 +94,7 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
       title: 'Metal Keychain - Oval (Double)',
       category: 'keychains',
       price: 200,
-      desc: 'Double side high gloss photo printing. Oval shape.',
+      desc: 'Oval-shaped metal keychain. Double side high-gloss photo printing.',
       image: keychainImg,
       type: 'keychain',
       shape: 'oval',
@@ -105,7 +105,7 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
       title: 'Premium Custom Tshirt',
       category: 'apparel',
       price: 600,
-      desc: 'Share your text/images to place your custom print on combed cotton.',
+      desc: 'Custom print tee on combed cotton. Send your custom images/text!',
       image: tshirtImg,
       type: 'tshirt',
       color: '#ffffff',
@@ -116,7 +116,7 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
       title: 'Ceramic mug & Fridge magnet',
       category: 'apparel',
       price: 150,
-      desc: 'Custom printed glossy fridge magnet. Perfect gift or memorabilia.',
+      desc: 'Glossy fridge magnet prints. Perfect custom gift or souvenir.',
       image: magnetImg,
       type: 'magnet',
       color: '#ffffff',
@@ -132,35 +132,35 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
     <section className="section catalog-section" id="catalog">
       <div className="catalog-container">
         <div className="catalog-header">
-          <h2>Our <span className="gradient-text">Product Catalog</span></h2>
-          <p>Choose from our standard items, add directly to cart, or load them into the 3D customizer for complete personalization.</p>
+          <h2>✨ Our <span className="neon-text">Custom Shop</span> ✨</h2>
+          <p>Choose an adorable design to order directly, or open it in the 3D studio to personalize colors, text, and artwork files!</p>
         </div>
 
         {/* Filter Navigation */}
         <div className="catalog-filters">
           <button 
-            className={`btn btn-sm ${filter === 'all' ? 'btn-secondary' : 'btn-outline'}`}
+            className={`btn btn-sm ${filter === 'all' ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setFilter('all')}
           >
-            All Products
+            All Gifts 🎁
           </button>
           <button 
-            className={`btn btn-sm ${filter === 'mugs' ? 'btn-secondary' : 'btn-outline'}`}
+            className={`btn btn-sm ${filter === 'mugs' ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setFilter('mugs')}
           >
-            Mugs
+            Cozy Mugs ☕
           </button>
           <button 
-            className={`btn btn-sm ${filter === 'keychains' ? 'btn-secondary' : 'btn-outline'}`}
+            className={`btn btn-sm ${filter === 'keychains' ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setFilter('keychains')}
           >
-            Keychains
+            Keychains 🔑
           </button>
           <button 
-            className={`btn btn-sm ${filter === 'apparel' ? 'btn-secondary' : 'btn-outline'}`}
+            className={`btn btn-sm ${filter === 'apparel' ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setFilter('apparel')}
           >
-            Apparel & Magnets
+            Apparel & Magnets 👕
           </button>
         </div>
 
@@ -180,8 +180,8 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <button
                       className="btn btn-outline btn-sm"
-                      style={{ padding: '8px' }}
-                      title="Customize in 3D"
+                      style={{ padding: '8px 12px' }}
+                      title="Personalize in 3D"
                       onClick={() => onSelectForCustomizer(p.type, p.color || '#ffffff', p.shape || 'star')}
                     >
                       <Edit3 size={16} />
