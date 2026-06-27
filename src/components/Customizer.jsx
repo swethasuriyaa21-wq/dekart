@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Upload, ShoppingCart, Type, Palette, Sparkles } from 'lucide-react';
+import { Upload, ShoppingCart, Type, Palette, Sparkles, Image as ImageIcon } from 'lucide-react';
 
 export default function Customizer({
   activeProduct,
@@ -13,15 +13,15 @@ export default function Customizer({
   activeShape,
   setActiveShape,
   onAddToCart,
-  viewerRef, // Ref passed to capture R3F drag events specifically inside the preview panel
+  viewerRef,
 }) {
   const fileInputRef = useRef(null);
 
   const products = [
-    { id: 'mug', label: 'Ceramic Mug', price: 269, desc: 'Premium white/black gloss' },
-    { id: 'keychain', label: 'Metal Keychain', price: 200, desc: 'Engraved shapes' },
-    { id: 'tshirt', label: 'Custom Tshirt', price: 600, desc: '100% combed cotton' },
-    { id: 'magnet', label: 'Fridge Magnet', price: 150, desc: 'Flexible printable sheet' },
+    { id: 'mug', label: 'Ceramic Mug', price: 269 },
+    { id: 'keychain', label: 'Metal Keychain', price: 200 },
+    { id: 'tshirt', label: 'Custom Tshirt', price: 600 },
+    { id: 'magnet', label: 'Fridge Magnet', price: 150 },
   ];
 
   const colors = [
@@ -34,10 +34,32 @@ export default function Customizer({
   ];
 
   const shapes = [
-    { id: 'star', label: 'Star Shape' },
-    { id: 'heart', label: 'Heart Shape' },
-    { id: 'oval', label: 'Oval Shape' },
-    { id: 'diamond', label: 'Diamond Shape' },
+    { id: 'star', label: 'Star' },
+    { id: 'heart', label: 'Heart' },
+    { id: 'oval', label: 'Oval' },
+    { id: 'diamond', label: 'Diamond' },
+  ];
+
+  // Presets templates to immediately wow the user with realistic renderings
+  const designPresets = [
+    {
+      label: '☕ But First, Coffee',
+      text: 'BUT FIRST, COFFEE ☕',
+      color: '#111111',
+      shape: 'oval',
+    },
+    {
+      label: '🎉 Happy Birthday',
+      text: 'HAPPY BIRTHDAY TO YOU 🎉',
+      color: '#f50057',
+      shape: 'heart',
+    },
+    {
+      label: '🚀 Creative Soul',
+      text: 'CREATIVE SOUL 🚀',
+      color: '#1976d2',
+      shape: 'star',
+    },
   ];
 
   const handleImageUpload = (e) => {
@@ -51,10 +73,17 @@ export default function Customizer({
     }
   };
 
+  const applyPreset = (preset) => {
+    setDesignText(preset.text);
+    setDesignColor(preset.color);
+    setActiveShape(preset.shape);
+    // Clear custom design image on text-only preset to show clean render
+    setDesignImage(null);
+  };
+
   const currentProductInfo = products.find(p => p.id === activeProduct);
 
   const handleAddToCartClick = () => {
-    // Generate variant label
     let variant = '';
     if (activeProduct === 'keychain') {
       variant = `${activeShape.toUpperCase()} Pendant`;
@@ -86,18 +115,21 @@ export default function Customizer({
         <div className="customizer-viewer-panel glass-panel" ref={viewerRef}>
           <div className="customizer-watermark">
             <Sparkles size={14} className="neon-text" style={{ color: '#00f2fe' }} />
-            <span>Interactive 3D Studio (Drag to Spin)</span>
+            <span>Interactive 3D Studio (Drag to Rotate)</span>
           </div>
         </div>
 
-        {/* Right Controls Panel */}
+        {/* Right Controls Panel (Studio Sidebar) */}
         <div className="customizer-controls glass-panel">
-          <h2>Create Your Masterpiece</h2>
-          <p>Tweak colors, add typography, upload illustrations, and preview your item instantly.</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+            <Sparkles size={20} className="neon-text" style={{ color: '#00f2fe' }} />
+            <h2 style={{ margin: 0 }}>Design Workspace</h2>
+          </div>
+          <p>Tweak colors, select shapes, upload graphics, or click design presets below to see the WebGL model update in real-time.</p>
 
-          {/* Product Type Selector */}
+          {/* 1. Product Selection */}
           <div className="control-group">
-            <span className="control-label">1. Choose Product</span>
+            <span className="control-label">1. Select Product Model</span>
             <div className="product-selector-grid">
               {products.map((p) => (
                 <button
@@ -105,7 +137,6 @@ export default function Customizer({
                   className={`selector-btn ${activeProduct === p.id ? 'active' : ''}`}
                   onClick={() => {
                     setActiveProduct(p.id);
-                    // Set default colors matching products
                     if (p.id === 'mug') setDesignColor('#ffffff');
                     if (p.id === 'tshirt') setDesignColor('#ffffff');
                     if (p.id === 'keychain') setDesignColor('#ffffff');
@@ -113,17 +144,17 @@ export default function Customizer({
                   }}
                 >
                   {p.label.split(' ')[1]}
-                  <span style={{ fontSize: '0.7rem', opacity: 0.8 }}>₹{p.price}</span>
+                  <span style={{ fontSize: '0.72rem', opacity: 0.8 }}>₹{p.price}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Color Selection */}
+          {/* 2. Color Selection */}
           <div className="control-group">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-              <Palette size={16} className="neon-text" style={{ color: '#7000ff' }} />
-              <span className="control-label" style={{ marginBottom: 0 }}>2. Product Color</span>
+              <Palette size={15} className="neon-text" style={{ color: '#7000ff' }} />
+              <span className="control-label" style={{ marginBottom: 0 }}>2. Glaze / Base Color</span>
             </div>
             <div className="color-picker-flex">
               {colors.map((c) => (
@@ -138,10 +169,10 @@ export default function Customizer({
             </div>
           </div>
 
-          {/* Keychain Shapes (Conditional rendering) */}
+          {/* 3. Keychain Shapes (Conditional rendering) */}
           {activeProduct === 'keychain' && (
             <div className="control-group">
-              <span className="control-label">3. Keychain Ring Pendant Shape</span>
+              <span className="control-label">3. Ring Pendant shape</span>
               <div className="shape-selector-grid">
                 {shapes.map((s) => (
                   <button
@@ -149,18 +180,37 @@ export default function Customizer({
                     className={`shape-btn ${activeShape === s.id ? 'active' : ''}`}
                     onClick={() => setActiveShape(s.id)}
                   >
-                    {s.label.split(' ')[0]}
+                    {s.label}
                   </button>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Image Upload box */}
+          {/* 4. Preset Graphic Templates */}
           <div className="control-group">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-              <Upload size={16} className="neon-text" style={{ color: '#00f2fe' }} />
-              <span className="control-label" style={{ marginBottom: 0 }}>3. Upload Artwork / Photo</span>
+              <ImageIcon size={15} className="neon-text" style={{ color: '#ff007a' }} />
+              <span className="control-label" style={{ marginBottom: 0 }}>3. Quick Design Presets</span>
+            </div>
+            <div className="preset-grid">
+              {designPresets.map((preset, index) => (
+                <button
+                  key={index}
+                  className="preset-btn"
+                  onClick={() => applyPreset(preset)}
+                >
+                  {preset.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 5. Custom Image Uploader */}
+          <div className="control-group">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+              <Upload size={15} className="neon-text" style={{ color: '#00f2fe' }} />
+              <span className="control-label" style={{ marginBottom: 0 }}>4. Upload Custom Photo</span>
             </div>
             <div className="image-upload-box" onClick={() => fileInputRef.current?.click()}>
               <input
@@ -173,28 +223,27 @@ export default function Customizer({
               {designImage ? (
                 <>
                   <img src={designImage} alt="Preview" className="image-upload-preview" />
-                  <span style={{ fontSize: '0.85rem', color: '#00f2fe' }}>Replace Photo</span>
+                  <span style={{ fontSize: '0.85rem', color: '#00f2fe', fontWeight: 600 }}>Change Graphic</span>
                 </>
               ) : (
                 <>
-                  <Upload size={24} style={{ color: '#9ca3af' }} />
-                  <span style={{ fontSize: '0.85rem', fontWeight: 500 }}>Select design image</span>
-                  <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>Supports PNG, JPG, JPEG</span>
+                  <Upload size={22} style={{ color: '#6b7280' }} />
+                  <span style={{ fontSize: '0.82rem', fontWeight: 600 }}>Select Photo File</span>
                 </>
               )}
             </div>
           </div>
 
-          {/* Slogan Text Input */}
+          {/* 6. Typography Text Input */}
           <div className="control-group">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-              <Type size={16} className="neon-text" style={{ color: '#ff007a' }} />
-              <span className="control-label" style={{ marginBottom: 0 }}>4. Add Custom Text / Name</span>
+              <Type size={15} className="neon-text" style={{ color: '#7000ff' }} />
+              <span className="control-label" style={{ marginBottom: 0 }}>5. Add Slogan / Name</span>
             </div>
             <input
               type="text"
               className="glass-input"
-              placeholder="e.g. Happy Birthday, Best Boss, Logo text"
+              placeholder="Type custom text here..."
               value={designText}
               onChange={(e) => setDesignText(e.target.value)}
             />

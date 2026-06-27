@@ -2,6 +2,76 @@ import React, { useMemo, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 
+// Real-time Hot Steam Particles Emitter
+function SteamParticles({ count = 15 }) {
+  const pointsRef = useRef();
+
+  // Create individual particle data: position, speed, phase, scale
+  const particles = useMemo(() => {
+    const data = [];
+    for (let i = 0; i < count; i++) {
+      data.push({
+        y: 0.7 + Math.random() * 1.5, // staggered start heights
+        xOffset: (Math.random() - 0.5) * 0.25,
+        zOffset: (Math.random() - 0.5) * 0.25,
+        speed: 0.25 + Math.random() * 0.25,
+        phase: Math.random() * Math.PI * 2,
+        scale: 0.2 + Math.random() * 0.5,
+      });
+    }
+    return data;
+  }, [count]);
+
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+
+  useFrame((state) => {
+    if (!pointsRef.current) return;
+    const time = state.clock.getElapsedTime();
+
+    particles.forEach((p, idx) => {
+      // Rise up
+      p.y += p.speed * 0.015;
+
+      // Reset when reaching top
+      if (p.y > 2.2) {
+        p.y = 0.72;
+        p.xOffset = (Math.random() - 0.5) * 0.25;
+        p.zOffset = (Math.random() - 0.5) * 0.25;
+        p.speed = 0.25 + Math.random() * 0.25;
+      }
+
+      // Wavy drift using sine waves
+      const driftX = p.xOffset + Math.sin(time * 2 + p.phase) * 0.08;
+      const driftZ = p.zOffset + Math.cos(time * 2 + p.phase) * 0.08;
+
+      dummy.position.set(driftX, p.y, driftZ);
+
+      // Fade out and expand slightly as steam rises
+      const lifeRatio = (p.y - 0.7) / 1.5; // 0 to 1
+      const size = p.scale * (1.0 + lifeRatio * 1.5);
+      dummy.scale.set(size, size, size);
+
+      dummy.updateMatrix();
+      pointsRef.current.setMatrixAt(idx, dummy.matrix);
+    });
+
+    pointsRef.current.instanceMatrix.needsUpdate = true;
+  });
+
+  return (
+    <instancedMesh ref={pointsRef} args={[null, null, count]} castShadow={false}>
+      <sphereGeometry args={[0.04, 8, 8]} />
+      <meshBasicMaterial
+        color="#e5e7eb"
+        transparent
+        opacity={0.12}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </instancedMesh>
+  );
+}
+
 // Helper to draw the custom upload/text design on a dynamic canvas texture
 function useDesignTexture(color, designImage, designText, type) {
   const canvasRef = useRef(document.createElement('canvas'));
@@ -27,19 +97,13 @@ function useDesignTexture(color, designImage, designText, type) {
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Draw grid or print guidelines for details (subtle aesthetic)
-    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-    ctx.lineWidth = 2;
+    // Subtle guidelines
+    ctx.strokeStyle = color === '#ffffff' ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.02)';
+    ctx.lineWidth = 1;
     for (let i = 0; i < canvas.width; i += 64) {
       ctx.beginPath();
       ctx.moveTo(i, 0);
       ctx.lineTo(i, canvas.height);
-      ctx.stroke();
-    }
-    for (let j = 0; j < canvas.height; j += 64) {
-      ctx.beginPath();
-      ctx.moveTo(0, j);
-      ctx.lineTo(canvas.width, j);
       ctx.stroke();
     }
 
@@ -49,70 +113,61 @@ function useDesignTexture(color, designImage, designText, type) {
         const img = new Image();
         img.src = designImage;
         img.onload = () => {
-          // Center and scale image
           const aspect = img.width / img.height;
-          let drawWidth = 240;
-          let drawHeight = 240 / aspect;
-          if (drawHeight > 240) {
-            drawHeight = 240;
-            drawWidth = 240 * aspect;
+          let drawWidth = 260;
+          let drawHeight = 260 / aspect;
+          if (drawHeight > 260) {
+            drawHeight = 260;
+            drawWidth = 260 * aspect;
           }
 
-          // Positioning based on product type
-          let x = (canvas.width - drawWidth) / 2;
+          let x = (canvas.width * 0.5) - (drawWidth / 2);
           let y = (canvas.height - drawHeight) / 2;
-          
-          if (type === 'mug') {
-            // For mug, wrap around front (middle-right of the flat texture)
-            x = (canvas.width * 0.5) - (drawWidth / 2);
-          }
 
-          // Rounded corners for the image card
           ctx.save();
           ctx.beginPath();
-          ctx.roundRect(x, y, drawWidth, drawHeight, 12);
+          ctx.roundRect(x, y, drawWidth, drawHeight, 16);
           ctx.clip();
           ctx.drawImage(img, x, y, drawWidth, drawHeight);
           ctx.restore();
 
-          // Render text AFTER image completes loading
           drawText(x + drawWidth / 2, y + drawHeight + 35);
           texture.needsUpdate = true;
         };
       } else {
-        // Draw default placeholder text/icon if nothing is uploaded
-        ctx.fillStyle = color === '#ffffff' ? '#333333' : '#cccccc';
+        // Draw elegant default typographic mockup
+        ctx.fillStyle = color === '#ffffff' ? '#111111' : '#ffffff';
         ctx.font = 'bold 36px Outfit, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('DOBJECT PRINTINGS', canvas.width / 2, canvas.height / 2 - 20);
+        ctx.fillText('DOBJECT STUDIO', canvas.width / 2, canvas.height / 2 - 25);
         
-        ctx.font = '24px Inter, sans-serif';
-        ctx.fillText('Your Design Here', canvas.width / 2, canvas.height / 2 + 20);
+        ctx.font = '22px Inter, sans-serif';
+        ctx.fillStyle = color === '#ffffff' ? '#666666' : '#aaaaaa';
+        ctx.fillText('Your Print Design Simulator', canvas.width / 2, canvas.height / 2 + 15);
         
-        drawText(canvas.width / 2, canvas.height / 2 + 80);
+        drawText(canvas.width / 2, canvas.height / 2 + 75);
         texture.needsUpdate = true;
       }
     };
 
     const drawText = (centerX, yPos) => {
       if (designText) {
-        ctx.fillStyle = color === '#ffffff' ? '#111111' : '#ffffff';
-        ctx.font = 'bold 32px Outfit, sans-serif';
+        ctx.fillStyle = color === '#ffffff' ? '#00f2fe' : '#ffffff';
+        ctx.font = 'bold 36px Outfit, sans-serif';
         ctx.textAlign = 'center';
         
-        // Wrap text if too long
         const words = designText.split(' ');
         let line = '';
-        let currentY = designImage ? yPos : canvas.height / 2 + 50;
+        let currentY = designImage ? yPos : canvas.height / 2 + 65;
         
         for (let n = 0; n < words.length; n++) {
           let testLine = line + words[n] + ' ';
           let metrics = ctx.measureText(testLine);
           let testWidth = metrics.width;
-          if (testWidth > 400 && n > 0) {
+          if (testWidth > 450 && n > 0) {
             ctx.fillText(line, designImage ? centerX : canvas.width / 2, currentY);
             line = words[n] + ' ';
-            currentY += 36;
+            currentY += 40;
           } else {
             line = testLine;
           }
@@ -131,18 +186,16 @@ function useDesignTexture(color, designImage, designText, type) {
 export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = null, designText = '', shape = 'star' }) {
   const groupRef = useRef();
 
-  // Subtle rotation over time
   useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.getElapsedTime() * 0.3) * 0.15;
-      groupRef.current.rotation.x = Math.cos(state.clock.getElapsedTime() * 0.2) * 0.08;
+      groupRef.current.rotation.y = Math.sin(state.clock.getElapsedTime() * 0.25) * 0.12;
+      groupRef.current.rotation.x = Math.cos(state.clock.getElapsedTime() * 0.15) * 0.05;
     }
   });
 
   const printTexture = useDesignTexture(color, designImage, designText, type);
 
-  // Procedural geometries
-  // Heart Shape for keychain
+  // Keychain Extrusions
   const heartGeometry = useMemo(() => {
     const s = new THREE.Shape();
     s.moveTo(0, 0.4);
@@ -150,10 +203,9 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
     s.bezierCurveTo(0.6, -0.1, 0.2, -0.4, 0, -0.7);
     s.bezierCurveTo(-0.2, -0.4, -0.6, -0.1, -0.6, 0.3);
     s.bezierCurveTo(-0.6, 0.7, -0.1, 0.7, 0, 0.4);
-    return new THREE.ExtrudeGeometry(s, { depth: 0.1, bevelEnabled: true, bevelSegments: 3, steps: 1, bevelSize: 0.04, bevelThickness: 0.04 });
+    return new THREE.ExtrudeGeometry(s, { depth: 0.08, bevelEnabled: true, bevelSegments: 4, steps: 1, bevelSize: 0.03, bevelThickness: 0.03 });
   }, []);
 
-  // Star Shape
   const starGeometry = useMemo(() => {
     const s = new THREE.Shape();
     const spikes = 5;
@@ -177,17 +229,15 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
       rot += step;
     }
     s.closePath();
-    return new THREE.ExtrudeGeometry(s, { depth: 0.1, bevelEnabled: true, bevelSegments: 3, steps: 1, bevelSize: 0.04, bevelThickness: 0.04 });
+    return new THREE.ExtrudeGeometry(s, { depth: 0.08, bevelEnabled: true, bevelSegments: 4, steps: 1, bevelSize: 0.03, bevelThickness: 0.03 });
   }, []);
 
-  // Oval Shape
   const ovalGeometry = useMemo(() => {
     const s = new THREE.Shape();
     s.absellipse(0, 0, 0.45, 0.65, 0, Math.PI * 2, false);
-    return new THREE.ExtrudeGeometry(s, { depth: 0.1, bevelEnabled: true, bevelSegments: 3, steps: 1, bevelSize: 0.04, bevelThickness: 0.04 });
+    return new THREE.ExtrudeGeometry(s, { depth: 0.08, bevelEnabled: true, bevelSegments: 4, steps: 1, bevelSize: 0.03, bevelThickness: 0.03 });
   }, []);
 
-  // Diamond Shape
   const diamondGeometry = useMemo(() => {
     const s = new THREE.Shape();
     s.moveTo(0, 0.7);
@@ -195,106 +245,139 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
     s.lineTo(0, -0.7);
     s.lineTo(-0.5, 0);
     s.closePath();
-    return new THREE.ExtrudeGeometry(s, { depth: 0.1, bevelEnabled: true, bevelSegments: 3, steps: 1, bevelSize: 0.04, bevelThickness: 0.04 });
+    return new THREE.ExtrudeGeometry(s, { depth: 0.08, bevelEnabled: true, bevelSegments: 4, steps: 1, bevelSize: 0.03, bevelThickness: 0.03 });
   }, []);
 
-  // Extruded T-Shirt Geometry
+  // T-Shirt Extrusion
   const tshirtGeometry = useMemo(() => {
     const s = new THREE.Shape();
     s.moveTo(-0.2, 0.85);
-    s.quadraticCurveTo(0, 0.72, 0.2, 0.85); // Neck collar
-    s.lineTo(0.65, 0.85); // Right shoulder
-    s.lineTo(0.9, 0.5); // Right sleeve outer
-    s.lineTo(0.68, 0.3); // Right sleeve cuff
-    s.lineTo(0.48, 0.4); // Underarm right
-    s.lineTo(0.48, -0.85); // Hem right
-    s.lineTo(-0.48, -0.85); // Hem bottom
-    s.lineTo(-0.48, 0.4); // Underarm left
-    s.lineTo(-0.68, 0.3); // Left sleeve cuff
-    s.lineTo(-0.9, 0.5); // Left sleeve outer
-    s.lineTo(-0.65, 0.85); // Left shoulder
+    s.quadraticCurveTo(0, 0.72, 0.2, 0.85);
+    s.lineTo(0.65, 0.85);
+    s.lineTo(0.9, 0.5);
+    s.lineTo(0.68, 0.3);
+    s.lineTo(0.48, 0.4);
+    s.lineTo(0.48, -0.85);
+    s.lineTo(-0.48, -0.85);
+    s.lineTo(-0.48, 0.4);
+    s.lineTo(-0.68, 0.3);
+    s.lineTo(-0.9, 0.5);
+    s.lineTo(-0.65, 0.85);
     s.closePath();
-
-    return new THREE.ExtrudeGeometry(s, { depth: 0.12, bevelEnabled: true, bevelSegments: 3, steps: 1, bevelSize: 0.03, bevelThickness: 0.03 });
+    return new THREE.ExtrudeGeometry(s, { depth: 0.1, bevelEnabled: true, bevelSegments: 4, steps: 1, bevelSize: 0.02, bevelThickness: 0.02 });
   }, []);
 
   return (
     <group ref={groupRef}>
       {/* 3D Ceramic Mug */}
       {type === 'mug' && (
-        <group>
-          {/* Cylinder cup body */}
+        <group position={[0, -0.3, 0]}>
+          {/* Ceramic Cup Glazed Cylinder Body */}
           <mesh castShadow receiveShadow>
-            <cylinderGeometry args={[0.85, 0.85, 2.0, 32]} />
-            <meshStandardMaterial 
+            <cylinderGeometry args={[0.82, 0.82, 1.9, 48]} />
+            <meshPhysicalMaterial 
               map={printTexture} 
-              roughness={0.15} 
-              metalness={0.1} 
+              roughness={0.06} 
+              metalness={0.02} 
+              clearcoat={1.0}
+              clearcoatRoughness={0.05}
               side={THREE.DoubleSide} 
             />
           </mesh>
-          {/* Handle */}
-          <mesh position={[-0.8, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
-            <torusGeometry args={[0.45, 0.12, 16, 32, Math.PI * 1.05]} />
-            <meshStandardMaterial color={color} roughness={0.15} metalness={0.1} />
+
+          {/* Glazed Handle */}
+          <mesh position={[-0.8, 0.1, 0]} rotation={[0, 0, Math.PI / 2.3]} castShadow>
+            <torusGeometry args={[0.42, 0.11, 16, 32, Math.PI * 1.15]} />
+            <meshPhysicalMaterial 
+              color={color} 
+              roughness={0.06} 
+              metalness={0.02} 
+              clearcoat={1.0}
+              clearcoatRoughness={0.05}
+            />
           </mesh>
-          {/* Inner Liquid or hollow rim (procedural dark inner shadow cylinder) */}
-          <mesh position={[0, 0.99, 0]}>
-            <cylinderGeometry args={[0.81, 0.81, 0.02, 32]} />
-            <meshStandardMaterial color="#1a120b" roughness={0.9} />
+
+          {/* Hot Coffee Liquid filling the mug */}
+          <mesh position={[0, 0.72, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+            <circleGeometry args={[0.78, 32]} />
+            <meshPhysicalMaterial 
+              color="#2d1b10" 
+              roughness={0.05} 
+              metalness={0.1} 
+              clearcoat={0.8}
+            />
           </mesh>
+
+          {/* Rising Steam Particles */}
+          <SteamParticles count={18} />
         </group>
       )}
 
       {/* 3D Keychain */}
       {type === 'keychain' && (
-        <group position={[0, 0.3, 0]}>
-          {/* Metal Ring (top) */}
-          <mesh position={[0, 0.9, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow>
-            <torusGeometry args={[0.22, 0.03, 8, 24]} />
-            <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} />
+        <group position={[0, 0.25, 0]}>
+          {/* Polished Gold Ring */}
+          <mesh position={[0, 0.85, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow>
+            <torusGeometry args={[0.2, 0.028, 12, 32]} />
+            <meshPhysicalMaterial 
+              color="#d4af37" 
+              metalness={0.95} 
+              roughness={0.1} 
+              clearcoat={1.0}
+            />
           </mesh>
           
-          {/* Chain connector */}
-          <mesh position={[0, 0.72, 0]} rotation={[0, Math.PI / 2, 0]} castShadow>
-            <torusGeometry args={[0.08, 0.02, 8, 16]} />
-            <meshStandardMaterial color="#d4af37" metalness={0.9} roughness={0.1} />
+          {/* Connector link */}
+          <mesh position={[0, 0.68, 0]} rotation={[0, Math.PI / 2, 0]} castShadow>
+            <torusGeometry args={[0.07, 0.018, 8, 16]} />
+            <meshPhysicalMaterial 
+              color="#d4af37" 
+              metalness={0.95} 
+              roughness={0.1} 
+              clearcoat={1.0}
+            />
           </mesh>
           
-          {/* Pendant based on active shape */}
+          {/* Extruded Pendant base */}
           <mesh position={[0, 0, 0]} castShadow receiveShadow>
             {shape === 'star' && starGeometry}
             {shape === 'heart' && heartGeometry}
             {shape === 'oval' && ovalGeometry}
             {shape === 'diamond' && diamondGeometry}
-            {/* The pendant face uses a special mapping coordinate system or maps the canvas directly */}
-            <meshStandardMaterial 
+            <meshPhysicalMaterial 
               map={printTexture} 
-              roughness={0.2} 
-              metalness={0.3} 
+              roughness={0.1} 
+              metalness={0.15} 
+              clearcoat={1.0}
             />
           </mesh>
 
-          {/* Golden metal border for a premium look */}
-          <mesh position={[0, 0, -0.01]} scale={[1.04, 1.04, 1.0]} castShadow>
+          {/* Golden metallic border frame */}
+          <mesh position={[0, 0, -0.012]} scale={[1.03, 1.03, 1.0]} castShadow>
             {shape === 'star' && starGeometry}
             {shape === 'heart' && heartGeometry}
             {shape === 'oval' && ovalGeometry}
             {shape === 'diamond' && diamondGeometry}
-            <meshStandardMaterial color="#d4af37" metalness={0.95} roughness={0.1} />
+            <meshPhysicalMaterial 
+              color="#d4af37" 
+              metalness={0.95} 
+              roughness={0.1} 
+              clearcoat={1.0}
+            />
           </mesh>
         </group>
       )}
 
       {/* 3D T-Shirt */}
       {type === 'tshirt' && (
-        <group scale={[1.1, 1.1, 1.1]}>
+        <group scale={[1.05, 1.05, 1.05]} position={[0, 0.1, 0]}>
           <mesh castShadow receiveShadow>
             {tshirtGeometry}
-            <meshStandardMaterial 
+            <meshPhysicalMaterial 
               map={printTexture} 
-              roughness={0.8} 
-              metalness={0.1} 
+              roughness={0.85} 
+              metalness={0.0} 
+              bumpScale={0.01}
             />
           </mesh>
         </group>
@@ -303,19 +386,20 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
       {/* 3D Fridge Magnet */}
       {type === 'magnet' && (
         <group>
-          {/* Main Magnet body */}
+          {/* Magnet printable body */}
           <mesh castShadow receiveShadow>
-            <boxGeometry args={[1.4, 1.8, 0.08]} />
-            <meshStandardMaterial 
+            <boxGeometry args={[1.35, 1.75, 0.08]} />
+            <meshPhysicalMaterial 
               map={printTexture} 
-              roughness={0.15} 
-              metalness={0.1} 
+              roughness={0.1} 
+              metalness={0.05} 
+              clearcoat={0.9}
             />
           </mesh>
-          {/* Black Rubber Magnet Backing */}
+          {/* Matte rubber backing */}
           <mesh position={[0, 0, -0.05]} castShadow>
-            <boxGeometry args={[1.35, 1.75, 0.02]} />
-            <meshStandardMaterial color="#1a1a1a" roughness={0.95} metalness={0.0} />
+            <boxGeometry args={[1.3, 1.7, 0.02]} />
+            <meshStandardMaterial color="#1a1a1a" roughness={0.9} />
           </mesh>
         </group>
       )}
