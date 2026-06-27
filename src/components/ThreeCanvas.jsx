@@ -19,15 +19,16 @@ function MovingObject({ activeSection, activeProduct, designColor, designImage, 
     let targetScale = 1;
 
     const isMobile = window.innerWidth <= 768;
+    const time = state.clock.getElapsedTime();
 
     if (activeSection === 0) {
       // Hero (Centralized layout): mug is centered horizontally directly below the buttons
       targetX = 0;
       targetY = isMobile ? -0.95 : -0.7;
       targetZ = 0;
-      targetRotX = 0.2;
-      targetRotY = -0.45;
-      targetRotZ = -0.02;
+      targetRotX = 0.15 + Math.sin(time * 0.5) * 0.05; // gentle idle tilt
+      targetRotY = time * 0.35; // continuous elegant spin
+      targetRotZ = -state.pointer.x * 0.25; // physics banking drift based on cursor
       targetScale = isMobile ? 0.72 : 1.0;
     } else if (activeSection === 1) {
       // Customizer: snaps into left side frame
@@ -35,35 +36,35 @@ function MovingObject({ activeSection, activeProduct, designColor, designImage, 
       targetY = isMobile ? 0.65 : -0.05;
       targetZ = 0;
       targetRotX = 0.05;
-      targetRotY = state.clock.getElapsedTime() * 0.12;
+      targetRotY = time * 0.15; // slow preview rotation when not interacted
       targetRotZ = 0;
       targetScale = isMobile ? 0.85 : 1.15;
     } else if (activeSection === 2) {
-      // Catalog: float at the top-right margin, small background ornament
+      // Catalog: float at the top-right margin
       targetX = isMobile ? 1.8 : 2.3;
       targetY = isMobile ? -0.8 : 0.8;
       targetZ = -0.8;
-      targetRotX = 0.3;
-      targetRotY = state.clock.getElapsedTime() * 0.18;
-      targetRotZ = -0.1;
+      targetRotX = 0.25 + Math.cos(time * 0.4) * 0.05;
+      targetRotY = time * 0.4; 
+      targetRotZ = -state.pointer.x * 0.2;
       targetScale = 0.55;
     } else if (activeSection === 3) {
       // Instagram: float at the top-left margin
       targetX = isMobile ? -1.8 : -2.3;
       targetY = isMobile ? -0.6 : 0.8;
       targetZ = -0.8;
-      targetRotX = 0.15;
-      targetRotY = state.clock.getElapsedTime() * 0.22;
-      targetRotZ = 0.1;
+      targetRotX = 0.15 + Math.sin(time * 0.6) * 0.05;
+      targetRotY = time * 0.45;
+      targetRotZ = -state.pointer.x * 0.2;
       targetScale = 0.55;
     } else {
-      // Customer Feedback: float at the far top-right margin, very small and cute
+      // Customer Feedback: float at the far top-right margin
       targetX = isMobile ? 1.6 : 2.3;
       targetY = isMobile ? -0.9 : 1.0;
       targetZ = -1.2;
       targetRotX = 0.2;
-      targetRotY = state.clock.getElapsedTime() * 0.1;
-      targetRotZ = 0.05;
+      targetRotY = time * 0.3;
+      targetRotZ = -state.pointer.x * 0.15;
       targetScale = 0.45;
     }
 
