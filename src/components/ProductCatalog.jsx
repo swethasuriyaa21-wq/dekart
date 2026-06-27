@@ -198,17 +198,17 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
                   </div>
                 </div>
 
-                <div className="product-actions-flex" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '10px' }}>
+                <div className="product-actions-flex" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '8px' }}>
                   <button
                     className="btn btn-outline btn-sm"
-                    style={{ gap: '6px', fontSize: '0.75rem', fontWeight: 900 }}
+                    style={{ gap: '6px', fontSize: '0.72rem', fontWeight: 900, padding: '10px 8px' }}
                     onClick={() => onSelectForCustomizer(p.type, p.color || '#ffffff', p.shape || 'star')}
                   >
                     <Edit3 size={14} /> 3D CUSTOMIZE
                   </button>
                   <button
                     className="btn btn-primary btn-sm"
-                    style={{ gap: '6px', fontSize: '0.75rem', fontWeight: 900 }}
+                    style={{ gap: '6px', fontSize: '0.72rem', fontWeight: 900, padding: '10px 8px' }}
                     onClick={() => onAddToCart({
                       id: `${p.id}-${Date.now()}`,
                       productType: p.type,
