@@ -24,13 +24,14 @@ export default function Customizer({
     { id: 'magnet', label: 'Fridge Magnet', price: 150 },
   ];
 
+  // Grayscale / Monochrome color palette
   const colors = [
-    { hex: '#ffffff', name: 'Pearl White' },
+    { hex: '#ffffff', name: 'Alabaster White' },
     { hex: '#111111', name: 'Obsidian Black' },
-    { hex: '#d32f2f', name: 'Crimson Red' },
-    { hex: '#1976d2', name: 'Cobalt Blue' },
-    { hex: '#388e3c', name: 'Forest Green' },
-    { hex: '#f50057', name: 'Hot Pink' },
+    { hex: '#334155', name: 'Slate Charcoal' },
+    { hex: '#64748b', name: 'Cool Gray' },
+    { hex: '#cbd5e1', name: 'Light Silver' },
+    { hex: '#f8fafc', name: 'Milk White' },
   ];
 
   const shapes = [
@@ -40,7 +41,7 @@ export default function Customizer({
     { id: 'diamond', label: 'Diamond' },
   ];
 
-  // Presets templates to immediately wow the user with realistic renderings
+  // Monochrome design presets
   const designPresets = [
     {
       label: '☕ But First, Coffee',
@@ -51,13 +52,13 @@ export default function Customizer({
     {
       label: '🎉 Happy Birthday',
       text: 'HAPPY BIRTHDAY TO YOU 🎉',
-      color: '#f50057',
+      color: '#ffffff',
       shape: 'heart',
     },
     {
       label: '🚀 Creative Soul',
       text: 'CREATIVE SOUL 🚀',
-      color: '#1976d2',
+      color: '#334155',
       shape: 'star',
     },
   ];
@@ -77,7 +78,6 @@ export default function Customizer({
     setDesignText(preset.text);
     setDesignColor(preset.color);
     setActiveShape(preset.shape);
-    // Clear custom design image on text-only preset to show clean render
     setDesignImage(null);
   };
 
@@ -114,7 +114,7 @@ export default function Customizer({
         {/* Left Interactive 3D Viewer Placement */}
         <div className="customizer-viewer-panel glass-panel" ref={viewerRef}>
           <div className="customizer-watermark">
-            <Sparkles size={14} className="neon-text" style={{ color: '#00f2fe' }} />
+            <Sparkles size={14} style={{ color: '#000000' }} />
             <span>Interactive 3D Studio (Drag to Rotate)</span>
           </div>
         </div>
@@ -122,7 +122,7 @@ export default function Customizer({
         {/* Right Controls Panel (Studio Sidebar) */}
         <div className="customizer-controls glass-panel">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-            <Sparkles size={20} className="neon-text" style={{ color: '#00f2fe' }} />
+            <Sparkles size={20} style={{ color: '#000000' }} />
             <h2 style={{ margin: 0 }}>Design Workspace</h2>
           </div>
           <p>Tweak colors, select shapes, upload graphics, or click design presets below to see the WebGL model update in real-time.</p>
@@ -153,7 +153,7 @@ export default function Customizer({
           {/* 2. Color Selection */}
           <div className="control-group">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-              <Palette size={15} className="neon-text" style={{ color: '#7000ff' }} />
+              <Palette size={15} style={{ color: '#000000' }} />
               <span className="control-label" style={{ marginBottom: 0 }}>2. Glaze / Base Color</span>
             </div>
             <div className="color-picker-flex">
@@ -169,7 +169,7 @@ export default function Customizer({
             </div>
           </div>
 
-          {/* 3. Keychain Shapes (Conditional rendering) */}
+          {/* 3. Keychain Shapes */}
           {activeProduct === 'keychain' && (
             <div className="control-group">
               <span className="control-label">3. Ring Pendant shape</span>
@@ -190,7 +190,7 @@ export default function Customizer({
           {/* 4. Preset Graphic Templates */}
           <div className="control-group">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-              <ImageIcon size={15} className="neon-text" style={{ color: '#ff007a' }} />
+              <ImageIcon size={15} style={{ color: '#000000' }} />
               <span className="control-label" style={{ marginBottom: 0 }}>3. Quick Design Presets</span>
             </div>
             <div className="preset-grid">
@@ -209,7 +209,7 @@ export default function Customizer({
           {/* 5. Custom Image Uploader */}
           <div className="control-group">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-              <Upload size={15} className="neon-text" style={{ color: '#00f2fe' }} />
+              <Upload size={15} style={{ color: '#000000' }} />
               <span className="control-label" style={{ marginBottom: 0 }}>4. Upload Custom Photo</span>
             </div>
             <div className="image-upload-box" onClick={() => fileInputRef.current?.click()}>
@@ -223,7 +223,7 @@ export default function Customizer({
               {designImage ? (
                 <>
                   <img src={designImage} alt="Preview" className="image-upload-preview" />
-                  <span style={{ fontSize: '0.85rem', color: '#00f2fe', fontWeight: 600 }}>Change Graphic</span>
+                  <span style={{ fontSize: '0.85rem', color: '#000000', fontWeight: 600 }}>Change Graphic</span>
                 </>
               ) : (
                 <>
@@ -237,7 +237,7 @@ export default function Customizer({
           {/* 6. Typography Text Input */}
           <div className="control-group">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-              <Type size={15} className="neon-text" style={{ color: '#7000ff' }} />
+              <Type size={15} style={{ color: '#000000' }} />
               <span className="control-label" style={{ marginBottom: 0 }}>5. Add Slogan / Name</span>
             </div>
             <input
