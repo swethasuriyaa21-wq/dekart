@@ -125,11 +125,13 @@ export default function ThreeCanvas({
   designImage = null,
   designText = '',
   activeShape = 'star',
+  eventSource,
 }) {
   return (
     <div className={`canvas-container ${activeSection === 1 ? 'canvas-interactive' : ''}`}>
       <Canvas
         shadows
+        eventSource={eventSource}
         camera={{ position: [0, 0, 4.2], fov: 45 }}
         gl={{ preserveDrawingBuffer: true, antialias: true }}
       >

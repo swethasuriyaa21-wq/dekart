@@ -16,6 +16,7 @@ export default function App() {
   // Navigation & Scroll
   const [activeSection, setActiveSection] = useState(0);
   const viewerRef = useRef(null); // Capture drag events inside customizer panel
+  const appRef = useRef(null); // Capture global pointer events across the website
 
   // 3D Customizer State
   const [activeProduct, setActiveProduct] = useState('mug');
@@ -125,7 +126,7 @@ export default function App() {
   };
 
   return (
-    <div className="app-container">
+    <div className="app-container" ref={appRef}>
       {/* Fixed Background 3D Canvas */}
       <ThreeCanvas
         activeSection={activeSection}
@@ -134,6 +135,7 @@ export default function App() {
         designImage={designImage}
         designText={designText}
         activeShape={activeShape}
+        eventSource={appRef}
       />
 
       {/* Navigation Navbar */}
