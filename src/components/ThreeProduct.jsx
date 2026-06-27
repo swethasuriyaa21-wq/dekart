@@ -75,7 +75,7 @@ function SteamParticles({ count = 12 }) {
         time * p.spinSpeedZ
       );
 
-      // Scale (expanding slightly then shrinking as it disappears)
+      // Scale
       const lifeRatio = (p.y - 0.72) / 1.28; // 0 to 1
       const size = p.scale * (0.8 + Math.sin(lifeRatio * Math.PI) * 0.5) * Math.max(0, 1 - lifeRatio);
       dummy.scale.set(size, size, size);
@@ -90,7 +90,7 @@ function SteamParticles({ count = 12 }) {
   return (
     <instancedMesh ref={meshRef} args={[heartShapeGeometry, null, count]}>
       <meshBasicMaterial
-        color="#ff8fa3" // Cute strawberry pink steam hearts
+        color="#c8b6ff" // Soft pastel lavender steam hearts (No Pink!)
         transparent
         opacity={0.35}
         depthWrite={false}
@@ -125,8 +125,8 @@ function useDesignTexture(color, designImage, designText, type) {
     ctx.fillStyle = color === '#ffffff' ? '#FFFDF9' : color;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Cute background grid patterns for branding
-    ctx.strokeStyle = 'rgba(255,117,143,0.03)'; 
+    // Cute background grid patterns for branding (Sky Blue accents)
+    ctx.strokeStyle = 'rgba(76,201,240,0.05)'; 
     ctx.lineWidth = 2;
     for (let i = 0; i < canvas.width; i += 64) {
       ctx.beginPath();
@@ -159,7 +159,7 @@ function useDesignTexture(color, designImage, designText, type) {
           ctx.restore();
 
           // Border outline
-          ctx.strokeStyle = 'rgba(255,117,143,0.2)';
+          ctx.strokeStyle = 'rgba(76,201,240,0.2)';
           ctx.lineWidth = 4;
           ctx.beginPath();
           ctx.roundRect(x, y, drawWidth, drawHeight, 20);
@@ -169,8 +169,8 @@ function useDesignTexture(color, designImage, designText, type) {
           texture.needsUpdate = true;
         };
       } else {
-        // Cute Typographic Default Template
-        ctx.fillStyle = '#ff758f'; 
+        // Cute Typographic Default Template (Sky Blue text)
+        ctx.fillStyle = '#4cc9f0'; 
         ctx.font = '900 48px Outfit, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('✨ dobject studio ✨', canvas.width / 2, canvas.height / 2 - 25);
@@ -186,7 +186,7 @@ function useDesignTexture(color, designImage, designText, type) {
 
     const drawText = (centerX, yPos) => {
       if (designText) {
-        ctx.fillStyle = '#ff4d6d'; 
+        ctx.fillStyle = '#4cc9f0'; // Sky blue text color
         ctx.font = '900 40px Outfit, sans-serif';
         ctx.textAlign = 'center';
         
@@ -341,7 +341,7 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
             />
           </mesh>
 
-          {/* Adorable rising hearts steam particles */}
+          {/* Adorable rising steam particles (Lavender hearts) */}
           <SteamParticles count={10} />
         </group>
       )}
@@ -349,13 +349,13 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
       {/* 3D Keychain */}
       {type === 'keychain' && (
         <group position={[0, 0.25, 0]}>
-          {/* Polished Gold Ring */}
+          {/* Polished Lavender Metallic Ring */}
           <mesh position={[0, 0.85, 0]} rotation={[Math.PI / 2, 0, 0]} castShadow>
             <torusGeometry args={[0.2, 0.028, 12, 32]} />
             <meshPhysicalMaterial 
-              color="#d4af37" // Gold ring
-              metalness={0.95} 
-              roughness={0.1} 
+              color="#c8b6ff" // Lavender ring
+              metalness={0.9} 
+              roughness={0.15} 
               clearcoat={1.0}
             />
           </mesh>
@@ -364,9 +364,9 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
           <mesh position={[0, 0.68, 0]} rotation={[0, Math.PI / 2, 0]} castShadow>
             <torusGeometry args={[0.07, 0.018, 8, 16]} />
             <meshPhysicalMaterial 
-              color="#d4af37" 
-              metalness={0.95} 
-              roughness={0.1} 
+              color="#c8b6ff" 
+              metalness={0.9} 
+              roughness={0.15} 
               clearcoat={1.0}
             />
           </mesh>
@@ -386,16 +386,16 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
             />
           </mesh>
 
-          {/* Golden metallic border frame */}
+          {/* Lavender metallic border frame */}
           <mesh position={[0, 0, -0.012]} scale={[1.03, 1.03, 1.0]} castShadow>
             {shape === 'star' && starGeometry}
             {shape === 'heart' && heartGeometry}
             {shape === 'oval' && ovalGeometry}
             {shape === 'diamond' && diamondGeometry}
             <meshPhysicalMaterial 
-              color="#d4af37" // Golden border
-              metalness={0.95} 
-              roughness={0.1} 
+              color="#c8b6ff" // Lavender border
+              metalness={0.9} 
+              roughness={0.15} 
               clearcoat={1.0}
             />
           </mesh>

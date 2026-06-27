@@ -24,14 +24,14 @@ export default function Customizer({
     { id: 'magnet', label: 'Fridge Magnet', price: 150 },
   ];
 
-  // Cute Pastel Colors array
+  // Cute Pastel Colors array (No Pink)
   const colors = [
     { hex: '#ffffff', name: 'Pearl White' },
-    { hex: '#ff758f', name: 'Strawberry Pink' },
+    { hex: '#4cc9f0', name: 'Sky Blue' },
     { hex: '#80ed99', name: 'Fresh Mint' },
     { hex: '#ffb703', name: 'Butter Yellow' },
-    { hex: '#4cc9f0', name: 'Sky Blue' },
     { hex: '#c8b6ff', name: 'Lavender' },
+    { hex: '#a78bfa', name: 'Royal Violet' },
     { hex: '#111111', name: 'Obsidian Black' },
   ];
 
@@ -42,7 +42,7 @@ export default function Customizer({
     { id: 'diamond', label: 'Diamond' },
   ];
 
-  // Cute Pastel design presets
+  // Cute Pastel design presets (No Pink)
   const designPresets = [
     {
       label: '☕ But First, Coffee',
@@ -53,7 +53,7 @@ export default function Customizer({
     {
       label: '🎉 Happy Birthday',
       text: 'HAPPY BIRTHDAY TO YOU 🎉',
-      color: '#ff758f',
+      color: '#c8b6ff',
       shape: 'heart',
     },
     {
@@ -115,7 +115,7 @@ export default function Customizer({
         {/* Left Interactive 3D Viewer Placement */}
         <div className="customizer-viewer-panel glass-panel" ref={viewerRef}>
           <div className="customizer-watermark">
-            <Sparkles size={14} style={{ color: '#ff758f' }} />
+            <Sparkles size={14} style={{ color: '#4cc9f0' }} />
             <span>Interactive 3D Studio (Drag to Rotate)</span>
           </div>
         </div>
@@ -123,7 +123,7 @@ export default function Customizer({
         {/* Right Controls Panel (Studio Sidebar) */}
         <div className="customizer-controls glass-panel">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-            <Sparkles size={20} style={{ color: '#ff758f' }} />
+            <Sparkles size={20} style={{ color: '#4cc9f0' }} />
             <h2 style={{ margin: 0 }}>Design Workspace</h2>
           </div>
           <p>Tweak colors, select shapes, upload graphics, or click design presets below to see the WebGL model update in real-time.</p>
@@ -154,7 +154,7 @@ export default function Customizer({
           {/* 2. Color Selection */}
           <div className="control-group">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-              <Palette size={15} style={{ color: '#ff758f' }} />
+              <Palette size={15} style={{ color: '#4cc9f0' }} />
               <span className="control-label" style={{ marginBottom: 0 }}>2. Glaze / Base Color</span>
             </div>
             <div className="color-picker-flex">
@@ -191,7 +191,7 @@ export default function Customizer({
           {/* 4. Preset Graphic Templates */}
           <div className="control-group">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-              <ImageIcon size={15} style={{ color: '#ff758f' }} />
+              <ImageIcon size={15} style={{ color: '#4cc9f0' }} />
               <span className="control-label" style={{ marginBottom: 0 }}>3. Quick Design Presets</span>
             </div>
             <div className="preset-grid">
@@ -210,7 +210,7 @@ export default function Customizer({
           {/* 5. Custom Image Uploader */}
           <div className="control-group">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-              <Upload size={15} style={{ color: '#ff758f' }} />
+              <Upload size={15} style={{ color: '#4cc9f0' }} />
               <span className="control-label" style={{ marginBottom: 0 }}>4. Upload Custom Photo</span>
             </div>
             <div className="image-upload-box" onClick={() => fileInputRef.current?.click()}>
@@ -224,11 +224,11 @@ export default function Customizer({
               {designImage ? (
                 <>
                   <img src={designImage} alt="Preview" className="image-upload-preview" />
-                  <span style={{ fontSize: '0.85rem', color: '#ff758f', fontWeight: 600 }}>Change Graphic</span>
+                  <span style={{ fontSize: '0.85rem', color: '#4cc9f0', fontWeight: 600 }}>Change Graphic</span>
                 </>
               ) : (
                 <>
-                  <Upload size={22} style={{ color: '#ff758f' }} />
+                  <Upload size={22} style={{ color: '#4cc9f0' }} />
                   <span style={{ fontSize: '0.82rem', fontWeight: 600 }}>Select Photo File</span>
                 </>
               )}
@@ -238,7 +238,7 @@ export default function Customizer({
           {/* 6. Typography Text Input */}
           <div className="control-group">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-              <Type size={15} style={{ color: '#ff758f' }} />
+              <Type size={15} style={{ color: '#4cc9f0' }} />
               <span className="control-label" style={{ marginBottom: 0 }}>5. Add Slogan / Name</span>
             </div>
             <input

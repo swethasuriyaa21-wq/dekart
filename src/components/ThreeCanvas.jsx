@@ -21,16 +21,16 @@ function MovingObject({ activeSection, activeProduct, designColor, designImage, 
     const isMobile = window.innerWidth <= 768;
 
     if (activeSection === 0) {
-      // Hero: float right side, small and cute
-      targetX = isMobile ? 0 : 1.35;
-      targetY = isMobile ? -0.45 : 0.05;
+      // Hero (Centralized layout): mug is centered horizontally directly below the buttons
+      targetX = 0;
+      targetY = isMobile ? -0.95 : -0.7;
       targetZ = 0;
       targetRotX = 0.2;
       targetRotY = -0.45;
-      targetRotZ = -0.05;
-      targetScale = isMobile ? 0.75 : 1.05;
+      targetRotZ = -0.02;
+      targetScale = isMobile ? 0.72 : 1.0;
     } else if (activeSection === 1) {
-      // Customizer: snaps into left side frame, slightly larger but still cute
+      // Customizer: snaps into left side frame
       targetX = isMobile ? 0 : -1.15;
       targetY = isMobile ? 0.65 : -0.05;
       targetZ = 0;
@@ -67,7 +67,7 @@ function MovingObject({ activeSection, activeProduct, designColor, designImage, 
       targetScale = 0.45;
     }
 
-    // Dynamic, flexible cursor parallax (wider float range)
+    // Dynamic, flexible cursor parallax
     if (activeSection !== 1) {
       targetX += state.pointer.x * 0.75;
       targetY += state.pointer.y * 0.75;
