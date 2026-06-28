@@ -68,6 +68,29 @@ a {
   transition: var(--transition-cute);
 }
 
+/* 💎 Full-Screen 3D Background Canvas */
+.canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1; /* Sits beneath headers and panels */
+  pointer-events: none; /* Allows clicks to pass through to buttons */
+}
+
+.canvas-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.content-container {
+  position: relative;
+  z-index: 2; /* Sits on top of 3D fixed canvas background */
+  width: 100%;
+}
+
 /* 💎 Custom Neon Cursor Trail */
 .custom-cursor {
   width: 22px;
