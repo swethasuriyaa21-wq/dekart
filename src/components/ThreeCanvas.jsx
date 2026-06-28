@@ -75,6 +75,45 @@ function OrbitingProduct({ type, angle, radius }) {
   );
 }
 
+// Deep-background floating decorators that rise and drift
+function BackgroundDecorator({ type, shape, color = '#ffffff' }) {
+  const ref = useRef();
+  
+  const initialPos = useMemo(() => ({
+    x: (Math.random() - 0.5) * 8.5,
+    y: (Math.random() - 0.5) * 10 - 2, // spread along viewport height
+    z: -1.8 - Math.random() * 2.2, // deep background depth
+    rotSpeedX: 0.1 + Math.random() * 0.3,
+    rotSpeedY: 0.1 + Math.random() * 0.3,
+    driftSpeed: 0.08 + Math.random() * 0.08,
+    phase: Math.random() * Math.PI * 2,
+    scale: 0.22 + Math.random() * 0.12
+  }), []);
+
+  useFrame((state) => {
+    if (!ref.current) return;
+    const time = state.clock.getElapsedTime();
+    
+    // Slow upward vertical drift (loops from bottom to top)
+    let currentY = initialPos.y + (time * initialPos.driftSpeed);
+    currentY = ((currentY + 6) % 12) - 6;
+    ref.current.position.y = currentY;
+
+    // Soft horizontal wobble
+    ref.current.position.x = initialPos.x + Math.sin(time * 0.6 + initialPos.phase) * 0.35;
+    
+    // Rotate model
+    ref.current.rotation.y = time * initialPos.rotSpeedY;
+    ref.current.rotation.x = time * initialPos.rotSpeedX;
+  });
+
+  return (
+    <group ref={ref} scale={[initialPos.scale, initialPos.scale, initialPos.scale]}>
+      <ThreeProduct type={type} color={color} designText="" shape={shape} />
+    </group>
+  );
+}
+
 function MovingObject({ activeSection, activeProduct, designColor, designImage, designText, activeShape }) {
   const group = useRef();
 
@@ -216,6 +255,17 @@ export default function ThreeCanvas({
   activeShape = 'star',
   eventSource,
 }) {
+  const bgDecorators = useMemo(() => [
+    { type: 'mug', color: '#4cc9f0' },
+    { type: 'tshirt', color: '#ffffff' },
+    { type: 'keychain', shape: 'heart', color: '#c8b6ff' },
+    { type: 'mug', color: '#ffffff' },
+    { type: 'tshirt', color: '#c8b6ff' },
+    { type: 'keychain', shape: 'star', color: '#ffffff' },
+    { type: 'hoodie', color: '#4cc9f0' },
+    { type: 'cap', color: '#ffffff' }
+  ], []);
+
   return (
     <div className={`canvas-container ${activeSection === 1 ? 'canvas-interactive' : ''}`}>
       <Canvas
@@ -226,6 +276,11 @@ export default function ThreeCanvas({
       >
         {/* Twinkling Starfield in background */}
         <TwinklingStars />
+
+        {/* Floating background merchandise decorators */}
+        {bgDecorators.map((d, idx) => (
+          <BackgroundDecorator key={idx} type={d.type} shape={d.shape} color={d.color} />
+        ))}
 
         {/* Ambient lighting */}
         <ambientLight intensity={1.8} color="#fffdf9" />
