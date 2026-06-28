@@ -19,12 +19,21 @@ export default function Customizer({
 
   const products = [
     { id: 'mug', label: 'Ceramic Mug', price: 269 },
-    { id: 'keychain', label: 'Metal Keychain', price: 200 },
+    { id: 'keychain', label: 'Keychain Pendant', price: 200 },
     { id: 'tshirt', label: 'Custom Tshirt', price: 600 },
     { id: 'magnet', label: 'Fridge Magnet', price: 150 },
+    { id: 'hoodie', label: 'Cosy Hoodie', price: 1200 },
+    { id: 'cap', label: 'Custom Cap', price: 400 },
+    { id: 'tote', label: 'Tote Bag', price: 350 },
+    { id: 'bottle', label: 'Steel Bottle', price: 800 },
+    { id: 'poster', label: 'Wall Poster', price: 250 },
+    { id: 'sticker', label: 'Custom Sticker', price: 100 },
+    { id: 'notebook', label: 'Notebook', price: 300 },
+    { id: 'phonecase', label: 'Phone Case', price: 450 },
+    { id: 'gift', label: 'Puffy Pillow', price: 500 },
   ];
 
-  // Cute Pastel Colors array (No Pink)
+  // Cute Pastel Colors array
   const colors = [
     { hex: '#ffffff', name: 'Pearl White' },
     { hex: '#4cc9f0', name: 'Sky Blue' },
@@ -42,16 +51,16 @@ export default function Customizer({
     { id: 'diamond', label: 'Diamond' },
   ];
 
-  // Cute Pastel design presets (No Pink)
+  // Design presets
   const designPresets = [
     {
-      label: '☕ But First, Coffee',
+      label: '☕ Cozy Coffee',
       text: 'BUT FIRST, COFFEE ☕',
       color: '#111111',
       shape: 'oval',
     },
     {
-      label: '🎉 Happy Birthday',
+      label: '🎉 Birthday',
       text: 'HAPPY BIRTHDAY TO YOU 🎉',
       color: '#c8b6ff',
       shape: 'heart',
@@ -131,21 +140,19 @@ export default function Customizer({
           {/* 1. Product Selection */}
           <div className="control-group">
             <span className="control-label">1. Select Product Model</span>
-            <div className="product-selector-grid">
+            <div className="product-selector-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', maxHeight: '180px', overflowY: 'auto', paddingRight: '4px' }}>
               {products.map((p) => (
                 <button
                   key={p.id}
                   className={`selector-btn ${activeProduct === p.id ? 'active' : ''}`}
+                  style={{ padding: '10px 4px', gap: '4px' }}
                   onClick={() => {
                     setActiveProduct(p.id);
-                    if (p.id === 'mug') setDesignColor('#ffffff');
-                    if (p.id === 'tshirt') setDesignColor('#ffffff');
-                    if (p.id === 'keychain') setDesignColor('#ffffff');
-                    if (p.id === 'magnet') setDesignColor('#ffffff');
+                    setDesignColor('#ffffff');
                   }}
                 >
-                  {p.label.split(' ')[1]}
-                  <span style={{ fontSize: '0.72rem', opacity: 0.8 }}>₹{p.price}</span>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 800 }}>{p.label}</span>
+                  <span style={{ fontSize: '0.68rem', opacity: 0.8 }}>₹{p.price}</span>
                 </button>
               ))}
             </div>

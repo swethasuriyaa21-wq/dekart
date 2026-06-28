@@ -11,8 +11,12 @@ import InstagramFeed from './components/InstagramFeed';
 import CustomerFeedback from './components/CustomerFeedback';
 import Cart from './components/Cart';
 import Footer from './components/Footer';
+import LoadingScreen from './components/LoadingScreen';
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+  const [mousePos, setMousePos] = useState({ x: -100, y: -100 });
+
   // Navigation & Scroll
   const [activeSection, setActiveSection] = useState(0);
   const viewerRef = useRef(null); // Capture drag events inside customizer panel
@@ -28,6 +32,15 @@ export default function App() {
   // Cart State
   const [cartItems, setCartItems] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
+
+  // Track global mouse position for custom neon cursor trail
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   // Setup intersection observer to track current scroll section
   useEffect(() => {
@@ -127,6 +140,18 @@ export default function App() {
 
   return (
     <div className="app-container" ref={appRef}>
+      {/* Cinematic preloader overlay */}
+      {loading && <LoadingScreen onFinished={() => setLoading(false)} />}
+
+      {/* Custom neon circle cursor trail */}
+      <div 
+        className="custom-cursor"
+        style={{
+          left: `${mousePos.x}px`,
+          top: `${mousePos.y}px`,
+        }}
+      />
+
       {/* Fixed Background 3D Canvas */}
       <ThreeCanvas
         activeSection={activeSection}

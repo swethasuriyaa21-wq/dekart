@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Edit3, Heart, Sparkles, Award } from 'lucide-react';
+import { ShoppingCart, Edit3, Award, Sparkles } from 'lucide-react';
 
 // Import local assets
 import whiteMugImg from '../assets/white_mug.png';
@@ -13,100 +13,28 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
 
   const products = [
     {
-      id: 'white-mug-150',
-      title: 'White ceramic mug - 150ml',
-      category: 'mugs',
-      price: 229,
-      desc: 'Adorable mini glossy white mug. Send us your images/text to print!',
-      image: whiteMugImg,
-      type: 'mug',
-      color: '#ffffff',
-      variant: 'White Mug (150ml)',
-      badge: '✨ 3D Custom'
-    },
-    {
       id: 'white-mug-330',
       title: 'White ceramic mug - 330ml',
-      category: 'mugs',
+      category: 'drinkware',
       price: 269,
       desc: 'Standard daily glossy white mug. Send us your images/text to print!',
       image: whiteMugImg,
       type: 'mug',
       color: '#ffffff',
       variant: 'White Mug (330ml)',
-      badge: '🔥 Best Seller'
+      badge: '🔥 BEST SELLER'
     },
     {
       id: 'black-mug-330',
       title: 'Black ceramic mug - 330ml',
-      category: 'mugs',
+      category: 'drinkware',
       price: 269,
       desc: 'Sleek glossy black ceramic mug. Send us your images/text to print!',
       image: blackMugImg,
       type: 'mug',
       color: '#111111',
       variant: 'Black Mug (330ml)',
-      badge: '✨ 3D Custom'
-    },
-    {
-      id: 'keychain-star',
-      title: 'Metal plated keychain - Star',
-      category: 'keychains',
-      price: 200,
-      desc: 'Star-shaped metal keychain. Single side high-gloss photo printing.',
-      image: keychainImg,
-      type: 'keychain',
-      shape: 'star',
-      variant: 'Star Keychain (Single-side)',
-      badge: '✨ Photo Print'
-    },
-    {
-      id: 'keychain-heart',
-      title: 'Metal Keychain - Heart',
-      category: 'keychains',
-      price: 200,
-      desc: 'Heart-shaped metal keychain. Double side high-gloss photo printing.',
-      image: keychainImg,
-      type: 'keychain',
-      shape: 'heart',
-      variant: 'Heart Keychain (Double-side)',
-      badge: '🔥 Best Seller'
-    },
-    {
-      id: 'keychain-oval-single',
-      title: 'Metal plated keychain - Oval',
-      category: 'keychains',
-      price: 200,
-      desc: 'Oval-shaped metal keychain. Single side high-gloss photo printing.',
-      image: keychainImg,
-      type: 'keychain',
-      shape: 'oval',
-      variant: 'Oval Keychain (Single-side)',
-      badge: '✨ Photo Print'
-    },
-    {
-      id: 'keychain-diamond',
-      title: 'Metal plated keychain - Diamond',
-      category: 'keychains',
-      price: 200,
-      desc: 'Diamond-shaped metal keychain. Single side photo printing.',
-      image: keychainImg,
-      type: 'keychain',
-      shape: 'diamond',
-      variant: 'Diamond Keychain (Single-side)',
-      badge: '✨ Photo Print'
-    },
-    {
-      id: 'keychain-oval-double',
-      title: 'Metal Keychain - Oval (Double)',
-      category: 'keychains',
-      price: 200,
-      desc: 'Oval-shaped metal keychain. Double side high-gloss photo printing.',
-      image: keychainImg,
-      type: 'keychain',
-      shape: 'oval',
-      variant: 'Oval Keychain (Double-side)',
-      badge: '🔥 Best Seller'
+      badge: '✨ 3D CUSTOM'
     },
     {
       id: 'tshirt-custom',
@@ -118,19 +46,139 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
       type: 'tshirt',
       color: '#ffffff',
       variant: 'Custom White Tshirt',
-      badge: '👕 Combed Cotton'
+      badge: '👕 100% COTTON'
+    },
+    {
+      id: 'hoodie-cozy',
+      title: 'Cosy Fleece Hoodie',
+      category: 'apparel',
+      price: 1200,
+      desc: 'Ultra-soft fleece hoodie. Customizable chest/back print zones.',
+      image: tshirtImg,
+      type: 'hoodie',
+      color: '#ffffff',
+      variant: 'Cosy Hoodie',
+      badge: '🔥 BEST SELLER'
+    },
+    {
+      id: 'cap-custom',
+      title: 'Baseball Custom Cap',
+      category: 'apparel',
+      price: 400,
+      desc: 'Embroidery cap with adjustable brass buckle.',
+      image: tshirtImg,
+      type: 'cap',
+      color: '#ffffff',
+      variant: 'Baseball Cap',
+      badge: '🧢 EXCLUSIVE'
+    },
+    {
+      id: 'tote-canvas',
+      title: 'Canvas Tote Bag',
+      category: 'apparel',
+      price: 350,
+      desc: 'Thick organic cotton canvas tote. Durable handles.',
+      image: tshirtImg,
+      type: 'tote',
+      color: '#ffffff',
+      variant: 'Canvas Tote Bag',
+      badge: '🛍️ ORGANIC'
+    },
+    {
+      id: 'bottle-steel',
+      title: 'Steel Insulated Bottle',
+      category: 'drinkware',
+      price: 800,
+      desc: 'Insulated stainless steel flask. Keeps beverages hot or cold.',
+      image: whiteMugImg,
+      type: 'bottle',
+      color: '#ffffff',
+      variant: 'Insulated Bottle',
+      badge: '⚡ PREMIUM STEEL'
+    },
+    {
+      id: 'keychain-heart',
+      title: 'Metal Keychain - Heart',
+      category: 'keychains',
+      price: 200,
+      desc: 'Heart-shaped metal keychain. Double side high-gloss photo printing.',
+      image: keychainImg,
+      type: 'keychain',
+      shape: 'heart',
+      variant: 'Heart Keychain (Double-side)',
+      badge: '💖 POPULAR'
+    },
+    {
+      id: 'keychain-star',
+      title: 'Metal Keychain - Star',
+      category: 'keychains',
+      price: 200,
+      desc: 'Star-shaped metal keychain. Single side photo printing.',
+      image: keychainImg,
+      type: 'keychain',
+      shape: 'star',
+      variant: 'Star Keychain (Single-side)',
+      badge: '✨ PHOTO PRINT'
+    },
+    {
+      id: 'poster-wall',
+      title: 'Wall Poster Frame',
+      category: 'stationery',
+      price: 250,
+      desc: 'High-definition posters with top and bottom wooden hangers.',
+      image: magnetImg,
+      type: 'poster',
+      color: '#ffffff',
+      variant: 'Wall Poster',
+      badge: '🎨 MATTE PRINT'
+    },
+    {
+      id: 'notebook-spiral',
+      title: 'Spiral Bound Notebook',
+      category: 'stationery',
+      price: 300,
+      desc: 'Ruled diary with silver metal coil binding.',
+      image: magnetImg,
+      type: 'notebook',
+      color: '#ffffff',
+      variant: 'Spiral Notebook',
+      badge: '📓 160 PAGES'
+    },
+    {
+      id: 'phonecase-tough',
+      title: 'Polycarbonate Phone Case',
+      category: 'accessories',
+      price: 450,
+      desc: 'Impact-resistant phone case. Full cover print protection.',
+      image: magnetImg,
+      type: 'phonecase',
+      color: '#ffffff',
+      variant: 'Tough Phone Case',
+      badge: '📱 D2C TOUGH'
+    },
+    {
+      id: 'gift-pillow',
+      title: 'Cosy Puffy Pillow',
+      category: 'accessories',
+      price: 500,
+      desc: 'Fluffy personalized photo cushion. Perfect cozy gift.',
+      image: tshirtImg,
+      type: 'gift',
+      color: '#ffffff',
+      variant: 'Puffy Pillow',
+      badge: '🎁 COZY GIFT'
     },
     {
       id: 'magnet-fridge',
-      title: 'Ceramic mug & Fridge magnet',
-      category: 'apparel',
+      title: 'Fridge Photo Magnet',
+      category: 'accessories',
       price: 150,
       desc: 'Glossy fridge magnet prints. Perfect custom gift or souvenir.',
       image: magnetImg,
       type: 'magnet',
       color: '#ffffff',
       variant: 'Fridge Magnet',
-      badge: '🎁 Cozy Gift'
+      badge: '🎁 COZY GIFT'
     }
   ];
 
@@ -142,7 +190,7 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
     <section className="section catalog-section" id="catalog">
       <div className="catalog-container">
         <div className="catalog-header">
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.7)', padding: '8px 20px', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.8)', marginBottom: '16px', boxShadow: '0 4px 10px rgba(0,0,0,0.01)' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.03)', padding: '8px 20px', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.08)', marginBottom: '16px', boxShadow: '0 4px 10px rgba(0,0,0,0.01)' }}>
             <Award size={16} style={{ color: 'var(--pastel-sky)' }} />
             <span style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase', color: 'var(--pastel-sky)', letterSpacing: '0.05em' }}>Fancy Custom Prints</span>
           </div>
@@ -151,30 +199,48 @@ export default function ProductCatalog({ onAddToCart, onSelectForCustomizer }) {
         </div>
 
         {/* Filter Navigation */}
-        <div className="catalog-filters">
+        <div className="catalog-filters" style={{ flexWrap: 'wrap' }}>
           <button 
             className={`btn btn-sm ${filter === 'all' ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setFilter('all')}
+            style={{ marginBottom: '8px' }}
           >
             All Gifts 🎁
           </button>
           <button 
-            className={`btn btn-sm ${filter === 'mugs' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setFilter('mugs')}
+            className={`btn btn-sm ${filter === 'drinkware' ? 'btn-primary' : 'btn-outline'}`}
+            onClick={() => setFilter('drinkware')}
+            style={{ marginBottom: '8px' }}
           >
-            Cozy Mugs ☕
-          </button>
-          <button 
-            className={`btn btn-sm ${filter === 'keychains' ? 'btn-primary' : 'btn-outline'}`}
-            onClick={() => setFilter('keychains')}
-          >
-            Keychains 🔑
+            Drinkware ☕
           </button>
           <button 
             className={`btn btn-sm ${filter === 'apparel' ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setFilter('apparel')}
+            style={{ marginBottom: '8px' }}
           >
-            Apparel & Magnets 👕
+            Apparel 👕
+          </button>
+          <button 
+            className={`btn btn-sm ${filter === 'keychains' ? 'btn-primary' : 'btn-outline'}`}
+            onClick={() => setFilter('keychains')}
+            style={{ marginBottom: '8px' }}
+          >
+            Keychains 🔑
+          </button>
+          <button 
+            className={`btn btn-sm ${filter === 'stationery' ? 'btn-primary' : 'btn-outline'}`}
+            onClick={() => setFilter('stationery')}
+            style={{ marginBottom: '8px' }}
+          >
+            Stationery 📓
+          </button>
+          <button 
+            className={`btn btn-sm ${filter === 'accessories' ? 'btn-primary' : 'btn-outline'}`}
+            onClick={() => setFilter('accessories')}
+            style={{ marginBottom: '8px' }}
+          >
+            Accessories 📱
           </button>
         </div>
 
