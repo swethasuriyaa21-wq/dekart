@@ -12,7 +12,7 @@
   --pastel-pink: #f72585;
   
   /* High-Contrast Texts */
-  --text-primary: #ffffff;
+  --text-primary: #e9e8ff;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
 
@@ -409,7 +409,8 @@ button:hover ~ .custom-cursor,
   line-height: 1.05;
   font-weight: 900;
   letter-spacing: -0.04em;
-  color: #ffffff;
+  color: var(--pastel-sky);
+  text-shadow: 0 0 15px rgba(76, 201, 240, 0.2);
 }
 
 .hero-description {

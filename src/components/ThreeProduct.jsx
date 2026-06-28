@@ -156,7 +156,7 @@ function useDesignTexture(color, designImage, designText, type) {
         ctx.fillStyle = '#4cc9f0'; 
         ctx.font = '900 44px Outfit, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('✨ DOBJECT MERCH ✨', canvas.width / 2, canvas.height / 2 - 25);
+        ctx.fillText('✨ DOBJECT_PRINTING ✨', canvas.width / 2, canvas.height / 2 - 25);
         
         ctx.font = '600 22px Inter, sans-serif';
         ctx.fillStyle = '#94a3b8';

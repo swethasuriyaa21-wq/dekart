@@ -78,8 +78,8 @@ export default function LoadingScreen({ onFinished }) {
       {/* Logo and Brand Title */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: '#4cc9f0' }}>
         <Printer size={28} className="neon-text" style={{ filter: 'drop-shadow(0 0 8px #4cc9f0)' }} />
-        <h2 style={{ fontSize: '1.8rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#ffffff', margin: 0 }}>
-          dobject studio
+        <h2 style={{ fontSize: '1.8rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#4cc9f0', margin: 0, textShadow: '0 0 8px rgba(76, 201, 240, 0.4)' }}>
+          dobject_printing
         </h2>
       </div>
 
