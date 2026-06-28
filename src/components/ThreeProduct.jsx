@@ -532,6 +532,21 @@ export function ThreeProduct({ type = 'mug', color = '#ffffff', designImage = nu
           </mesh>
         </group>
       )}
+
+      {/* 14. Custom Flyer Page */}
+      {type === 'flyer' && (
+        <group>
+          <mesh castShadow receiveShadow>
+            <boxGeometry args={[1.2, 1.7, 0.012]} />
+            <meshPhysicalMaterial 
+              map={printTexture} 
+              roughness={0.18} 
+              clearcoat={1.0}
+              clearcoatRoughness={0.05}
+            />
+          </mesh>
+        </group>
+      )}
     </group>
   );
 }

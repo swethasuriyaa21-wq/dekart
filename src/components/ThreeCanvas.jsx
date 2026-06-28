@@ -256,13 +256,13 @@ export default function ThreeCanvas({
   eventSource,
 }) {
   const bgDecorators = useMemo(() => [
-    { type: 'mug', color: '#4cc9f0' },
+    { type: 'flyer', color: '#6C63FF' },
     { type: 'tshirt', color: '#ffffff' },
-    { type: 'keychain', shape: 'heart', color: '#c8b6ff' },
+    { type: 'flyer', color: '#FF4ECD' },
     { type: 'mug', color: '#ffffff' },
-    { type: 'tshirt', color: '#c8b6ff' },
+    { type: 'flyer', color: '#00D9FF' },
     { type: 'keychain', shape: 'star', color: '#ffffff' },
-    { type: 'hoodie', color: '#4cc9f0' },
+    { type: 'flyer', color: '#c8b6ff' },
     { type: 'cap', color: '#ffffff' }
   ], []);
 
